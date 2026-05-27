@@ -93,6 +93,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:#f4f6fb;color:#1a1a2e;min-
 .sbadge{font-size:11px;padding:3px 9px;border-radius:10px;font-weight:700}
 .bw{background:var(--cwb);color:var(--cw)}.bl{background:var(--clb);color:var(--cl)}.bd{background:var(--cdb);color:var(--cd)}.by{background:var(--cyb);color:var(--cy)}
 .viewer-score{font-size:11px;color:#888}
+.win-pick-btn{padding:5px 12px;font-size:12px;font-weight:600;border:1.5px solid #dde3f0;border-radius:7px;background:#f8faff;color:#555;cursor:pointer;font-family:inherit}
+.win-pick-btn:hover{background:var(--cwb);border-color:var(--cw);color:var(--cw)}
+.win-pick-btn.wpick-on{background:var(--cwb);border-color:var(--cw);color:var(--cw);font-weight:700}
+
 .tot-wrap{display:flex;flex-direction:column;gap:10px;margin-top:4px}
 .tot-sec{background:#fff;border-radius:10px;padding:14px;border:0.5px solid #dde3f0}
 .tot-sec h3{font-size:14px;font-weight:700;color:var(--cp);margin-bottom:4px}
@@ -440,6 +444,7 @@ function renderGame(g, grade) {
 
   const typeCls = g.type==='예선'?'b-pre':g.type==='결승'?'b-fin':'b-sf';
   const isDone = r.win !== '';
+  const isFinal = g.type === '결승' || g.type === '준결승';
 
   let dateEditHtml = '';
   if (isAdmin && editingDate === g.id) {
@@ -458,18 +463,34 @@ function renderGame(g, grade) {
   if (!canScore) {
     scoreHtml = `<div class="inp-row"><span class="viewer-score">일정 추후 공지</span></div>`;
   } else if (isAdmin) {
-    scoreHtml = `<div class="inp-row">
-      <span style="font-size:11px;color:#888">결과 입력:</span>
-      <input class="sc-inp" type="number" min="0" id="sa_${g.id}" value="${r.sa}" placeholder="0">
-      <span style="font-size:13px;color:#aaa">:</span>
-      <input class="sc-inp" type="number" min="0" id="sb_${g.id}" value="${r.sb}" placeholder="0">
-      <button class="save-btn" onclick="doSaveScore('${g.id}')">저장</button>
-      ${sbadge}
-    </div>`;
+    if (isFinal) {
+      const winA = r.win==='A', winB = r.win==='B';
+      scoreHtml = `<div class="inp-row" style="flex-wrap:wrap;gap:6px">
+        <span style="font-size:11px;color:#888">승리팀 선택:</span>
+        <button class="win-pick-btn${winA?' wpick-on':''}" onclick="pickWinner('${g.id}','A')">${grade}학년 ${g.a} 승</button>
+        <button class="win-pick-btn${winB?' wpick-on':''}" onclick="pickWinner('${g.id}','B')">${grade}학년 ${g.b} 승</button>
+        ${isDone?`<button class="cancel-btn" style="font-size:11px" onclick="clearWinner('${g.id}')">초기화</button>`:''}
+      </div>`;
+    } else {
+      scoreHtml = `<div class="inp-row">
+        <span style="font-size:11px;color:#888">결과 입력:</span>
+        <input class="sc-inp" type="number" min="0" id="sa_${g.id}" value="${r.sa}" placeholder="0">
+        <span style="font-size:13px;color:#aaa">:</span>
+        <input class="sc-inp" type="number" min="0" id="sb_${g.id}" value="${r.sb}" placeholder="0">
+        <button class="save-btn" onclick="doSaveScore('${g.id}')">저장</button>
+        ${sbadge}
+      </div>`;
+    }
   } else {
-    scoreHtml = isDone
-      ? `<div class="inp-row">${sbadge}${r.sa!==''?`<span style="font-size:13px;color:#555;font-weight:700;margin-left:4px">${r.sa} : ${r.sb}</span>`:''}</div>`
-      : `<div class="inp-row"><span class="viewer-score">경기 결과 대기 중</span></div>`;
+    if (isFinal) {
+      scoreHtml = isDone
+        ? `<div class="inp-row">${sbadge}</div>`
+        : `<div class="inp-row"><span class="viewer-score">경기 결과 대기 중</span></div>`;
+    } else {
+      scoreHtml = isDone
+        ? `<div class="inp-row">${sbadge}${r.sa!==''?`<span style="font-size:13px;color:#555;font-weight:700;margin-left:4px">${r.sa} : ${r.sb}</span>`:''}</div>`
+        : `<div class="inp-row"><span class="viewer-score">경기 결과 대기 중</span></div>`;
+    }
   }
 
   let editBtnHtml = isAdmin
@@ -489,12 +510,12 @@ function renderGame(g, grade) {
     <div class="gteams">
       <div class="${tac}">
         <div class="cls">${grade}학년 ${g.a}</div>
-        ${canScore?`<div class="sc">${r.sa!==''?r.sa:'-'}</div>`:''}
+        ${canScore&&!isFinal?`<div class="sc">${r.sa!==''?r.sa:'-'}</div>`:''}
       </div>
       <div class="vs">VS</div>
       <div class="${tbc}">
         <div class="cls">${g.b?grade+'학년 '+g.b:''}</div>
-        ${canScore?`<div class="sc">${r.sb!==''?r.sb:'-'}</div>`:''}
+        ${canScore&&!isFinal?`<div class="sc">${r.sb!==''?r.sb:'-'}</div>`:''}
       </div>
     </div>
     ${scoreHtml}
@@ -570,6 +591,13 @@ window.saveDate = async (id) => {
   if (v) await setD(id,v,rain);
 };
 window.restoreDate = async (id) => { await clearD(id); };
+window.pickWinner = async (id, side) => {
+  const win = side;
+  await set(ref(db, `league2026/results/${id}`), {sa:'', sb:'', win});
+};
+window.clearWinner = async (id) => {
+  await set(ref(db, `league2026/results/${id}`), {sa:'', sb:'', win:''});
+};
 window.doSaveScore = async (id) => {
   const sa = document.getElementById('sa_'+id)?.value||'';
   const sb = document.getElementById('sb_'+id)?.value||'';
