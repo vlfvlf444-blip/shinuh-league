@@ -198,7 +198,7 @@ const DEFAULT_GAMES = {
       {id:'t2_24', orig:'4월 23일(목)', a:'2반', b:'4반', type:'예선', initSa:'12', initSb:'11'},
       {id:'t2_14', orig:'4월 24일(금)', a:'1반', b:'4반', type:'예선', initSa:'11', initSb:'14'},
       {id:'t2_23', orig:'4월 27일(월)', a:'2반', b:'3반', type:'예선', initSa:'6',  initSb:'12'},
-      {id:'t2_SF', orig:'5월 11일(월)', a:'1반', b:'2반', type:'준결승', initSa:'', initSb:''},
+      {id:'t2_SF', orig:'5월 11일(월)', a:'1반', b:'2반', type:'3,4위전', initSa:'', initSb:''},
       {id:'t2_F',  orig:'5월 12일(화)', a:'3반', b:'4반', type:'결승', initSa:'',  initSb:''},
     ],
     3:[
@@ -208,7 +208,7 @@ const DEFAULT_GAMES = {
       {id:'t3_24', orig:'5월 18일(월)', a:'2반', b:'4반', type:'예선', initSa:'11', initSb:'2'},
       {id:'t3_14', orig:'5월 22일(금)', a:'1반', b:'4반', type:'예선', initSa:'11', initSb:'12'},
       {id:'t3_23', orig:'5월 26일(화)', a:'2반', b:'3반', type:'예선', initSa:'11', initSb:'6'},
-      {id:'t3_SF', orig:'5월 28일(화)', a:'1반', b:'4반', type:'준결승', initSa:'', initSb:''},
+      {id:'t3_SF', orig:'5월 28일(화)', a:'1반', b:'4반', type:'3,4위전', initSa:'', initSb:''},
       {id:'t3_F',  orig:'5월 29일(수)', a:'2반', b:'3반', type:'결승', initSa:'',  initSb:''},
     ]
   },
@@ -226,7 +226,7 @@ const DEFAULT_GAMES = {
       {id:'v2_24', orig:'6월 16일(화)', a:'2반', b:'4반', type:'예선', initSa:'', initSb:''},
       {id:'v2_14', orig:'6월 17일(수)', a:'1반', b:'4반', type:'예선', initSa:'', initSb:''},
       {id:'v2_23', orig:'6월 18일(목)', a:'2반', b:'3반', type:'예선', initSa:'', initSb:''},
-      {id:'v2_SF', orig:'6월 19일(금)', a:'예선3위', b:'예선4위', type:'준결승', initSa:'', initSb:''},
+      {id:'v2_SF', orig:'6월 19일(금)', a:'예선3위', b:'예선4위', type:'3,4위전', initSa:'', initSb:''},
       {id:'v2_F',  orig:'6월 22일(월)', a:'예선1위', b:'예선2위', type:'결승', initSa:'', initSb:''},
     ],
     3:[
@@ -236,7 +236,7 @@ const DEFAULT_GAMES = {
       {id:'v3_24', orig:'6월 26일(금)', a:'2반', b:'4반', type:'예선', initSa:'', initSb:''},
       {id:'v3_14', orig:'7월 6일(월)',  a:'1반', b:'4반', type:'예선', initSa:'', initSb:''},
       {id:'v3_23', orig:'7월 7일(화)',  a:'2반', b:'3반', type:'예선', initSa:'', initSb:''},
-      {id:'v3_SF', orig:'7월 8일(수)',  a:'예선3위', b:'예선4위', type:'준결승', initSa:'', initSb:''},
+      {id:'v3_SF', orig:'7월 8일(수)',  a:'예선3위', b:'예선4위', type:'3,4위전', initSa:'', initSb:''},
       {id:'v3_F',  orig:'7월 9일(수)',  a:'예선1위', b:'예선2위', type:'결승', initSa:'', initSb:''},
     ]
   },
@@ -254,7 +254,7 @@ const DEFAULT_GAMES = {
       {id:'p2_24', orig:'9월 23일(수)', a:'2반', b:'4반', type:'예선', initSa:'', initSb:''},
       {id:'p2_14', orig:'9월 28일(월)', a:'1반', b:'4반', type:'예선', initSa:'', initSb:''},
       {id:'p2_23', orig:'9월 29일(화)', a:'2반', b:'3반', type:'예선', initSa:'', initSb:''},
-      {id:'p2_SF', orig:'10월 6일(화)', a:'예선3위', b:'예선4위', type:'준결승', initSa:'', initSb:''},
+      {id:'p2_SF', orig:'10월 6일(화)', a:'예선3위', b:'예선4위', type:'3,4위전', initSa:'', initSb:''},
       {id:'p2_F',  orig:'10월 7일(수)', a:'예선1위', b:'예선2위', type:'결승', initSa:'', initSb:''},
     ],
     3:[
@@ -264,7 +264,7 @@ const DEFAULT_GAMES = {
       {id:'p3_24', orig:'10월 14일(수)', a:'2반', b:'4반', type:'예선', initSa:'', initSb:''},
       {id:'p3_14', orig:'10월 15일(목)', a:'1반', b:'4반', type:'예선', initSa:'', initSb:''},
       {id:'p3_23', orig:'10월 16일(금)', a:'2반', b:'3반', type:'예선', initSa:'', initSb:''},
-      {id:'p3_SF', orig:'10월 19일(월)', a:'예선3위', b:'예선4위', type:'준결승', initSa:'', initSb:''},
+      {id:'p3_SF', orig:'10월 19일(월)', a:'예선3위', b:'예선4위', type:'3,4위전', initSa:'', initSb:''},
       {id:'p3_F',  orig:'10월 20일(화)', a:'예선1위', b:'예선2위', type:'결승', initSa:'', initSb:''},
     ]
   },
@@ -391,7 +391,7 @@ function calcStd(sport, grade) {
     else if (r.win==='B'){st[g.b].w++;st[g.b].pts+=3;st[g.a].l++;}
     else {st[g.a].d++;st[g.a].pts++;st[g.b].d++;st[g.b].pts++;}
   });
-  return cls.map(c=>({cls:c,...st[c]})).sort((a,b)=>b.pts-a.pts||b.w-a.w);
+  return cls.map(c=>({cls:c,...st[c]})).sort((a,b)=>b.pts-a.pts||b.w-a.w||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf);
 }
 
 function calcTot(grade) {
@@ -412,14 +412,14 @@ function renderStd(sport, grade) {
   let h = `<div class="std-wrap"><table class="std-tbl"><thead><tr>
     <th style="width:38px">순위</th><th>반</th>
     <th style="width:30px">승</th><th style="width:30px">무</th><th style="width:30px">패</th>
-    <th style="width:38px">득점</th><th style="width:38px">실점</th><th style="width:38px">승점</th>
+    <th style="width:36px">득점</th><th style="width:36px">실점</th><th style="width:36px">득실</th><th style="width:36px">승점</th>
   </tr></thead><tbody>`;
   rows.forEach((r,i) => {
     const rc=i===0?'r1':i===1?'r2':i===2?'r3':'';
     const med=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
     h+=`<tr><td class="${rc}">${med}${i+1}</td><td class="tnm">${grade}학년 ${r.cls}</td>
       <td>${r.w}</td><td>${r.d}</td><td>${r.l}</td>
-      <td>${r.gf}</td><td>${r.ga}</td><td style="font-weight:700">${r.pts}</td></tr>`;
+      <td>${r.gf}</td><td>${r.ga}</td><td style="color:${r.gf-r.ga>0?'var(--cw)':r.gf-r.ga<0?'var(--cl)':'#888'}">${r.gf-r.ga>0?'+':''}${r.gf-r.ga}</td><td style="font-weight:700">${r.pts}</td></tr>`;
   });
   return h + `</tbody></table></div>`;
 }
@@ -444,7 +444,7 @@ function renderGame(g, grade) {
 
   const typeCls = g.type==='예선'?'b-pre':g.type==='결승'?'b-fin':'b-sf';
   const isDone = r.win !== '';
-  const isFinal = g.type === '결승' || g.type === '준결승';
+  const isFinal = g.type === '결승' || g.type === '3,4위전';
 
   let dateEditHtml = '';
   if (isAdmin && editingDate === g.id) {
