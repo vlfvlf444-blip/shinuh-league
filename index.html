@@ -437,21 +437,25 @@ function calcSportFinal(sport, grade) {
     else if (r.win==='B') { rank3=sf.b; rank4=sf.a; }
   }
 
-  // 결승/3,4위전 없는 경우 예선 순위로 채움
   const cls = GRADES[grade].cls;
-  if (!rank1 && preRank[0]) rank1 = preRank[0].cls;
-  if (!rank2 && preRank[1]) rank2 = preRank[1].cls;
-  if (cls.length >= 3 && !rank3 && preRank[2]) rank3 = preRank[2].cls;
-  if (cls.length >= 4 && !rank4 && preRank[3]) rank4 = preRank[3].cls;
-
   const hasFinResult = !!getR(fin?.id||'').win;
   const hasSfResult  = sf ? !!getR(sf.id).win : true;
 
+  // 결승 결과 없으면 1,2위는 null (미정)
+  // 3,4위전 결과 없으면 3,4위는 null (미정)
+  // 단, 결승 진출팀(예선 1,2위)은 미정으로 표시하되 예선순위 안내용으로만 사용
+  const preLabel1 = preRank[0] ? preRank[0].cls : null;
+  const preLabel2 = preRank[1] ? preRank[1].cls : null;
+  const preLabel3 = cls.length>=3 && preRank[2] ? preRank[2].cls : null;
+  const preLabel4 = cls.length>=4 && preRank[3] ? preRank[3].cls : null;
+
   return {
     ranks: [rank1, rank2, rank3, rank4],
+    preRanks: [preLabel1, preLabel2, preLabel3, preLabel4],
     finDone: hasFinResult,
     sfDone: hasSfResult,
-    hasSf: !!sf
+    hasSf: !!sf,
+    fin, sf
   };
 }
 
@@ -459,11 +463,12 @@ function calcTot(grade) {
   const cls = GRADES[grade].cls;
   const tot = {}; cls.forEach(c=>{tot[c]=0;});
   const rankPts = [4,3,2,1];
-  ['피구','티볼','배구','레이저런'].forEach(sp => {
+  ['티볼'].forEach(sp => { // 현재 티볼만 실시, 배구/피구/레이저런 실시 후 추가
     if (!DEFAULT_GAMES[sp]) return;
-    const {ranks} = calcSportFinal(sp, grade);
+    const {ranks, finDone, sfDone} = calcSportFinal(sp, grade);
     ranks.forEach((cls2, i) => {
-      if (cls2 && tot[cls2]!==undefined) tot[cls2] += rankPts[i]||1;
+      const isDone = i < 2 ? finDone : sfDone;
+      if (cls2 && isDone && tot[cls2]!==undefined) tot[cls2] += rankPts[i]||1;
     });
   });
   return cls.map(c=>({cls:c,pts:tot[c]})).sort((a,b)=>b.pts-a.pts);
@@ -598,33 +603,81 @@ function renderTot() {
 
     // ── 종목별 최종 순위 ──
     h += `<h3 style="margin-bottom:10px">${g}학년 종목별 최종 순위</h3>`;
-    ['티볼','배구','피구'].forEach(sp => {
+    ['티볼'].forEach(sp => { // 현재 티볼만 실시
       if (!DEFAULT_GAMES[sp]) return;
-      const {ranks, finDone, sfDone} = calcSportFinal(sp, g);
+      const {ranks, preRanks, finDone, sfDone, hasSf, fin, sf} = calcSportFinal(sp, g);
       const icon = sportInfo[sp];
-      h += `<div class="sport-final-wrap">
-        <h4><span class="sport-icon">${icon}</span>${sp}</h4>
-        <div class="sfgrid" style="grid-template-columns:repeat(${cls.length},1fr)">`;
-      const showRanks = cls.length === 3 ? ranks.slice(0,3) : ranks;
-      showRanks.forEach((team, i) => {
+      h += `<div class="sport-final-wrap"><h4><span class="sport-icon">${icon}</span>${sp}</h4>`;
+
+      const numShow = cls.length; // 1학년=3, 2,3학년=4
+      // ── 관리자: 결승/3,4위전 승리팀 선택 UI ──
+      if (isAdmin) {
+        // 결승 입력
+        if (fin && fin.b) {
+          const rFin = getR(fin.id);
+          const winA = rFin.win==='A', winB = rFin.win==='B';
+          const finA = preRanks[0]||fin.a, finB = preRanks[1]||fin.b;
+          h += `<div style="background:#f8faff;border-radius:8px;padding:10px;margin-bottom:6px">
+            <p style="font-size:11px;color:#888;margin-bottom:6px">🏆 결승 승리팀 선택 (예선 1,2위)</p>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <button class="win-pick-btn${winA?' wpick-on':''}" onclick="pickWinner('${fin.id}','A')">${g}학년 ${finA} 승</button>
+              <button class="win-pick-btn${winB?' wpick-on':''}" onclick="pickWinner('${fin.id}','B')">${g}학년 ${finB} 승</button>
+              ${finDone?`<button class="cancel-btn" style="font-size:11px" onclick="clearWinner('${fin.id}')">초기화</button>`:''}
+            </div>
+          </div>`;
+        }
+        // 3,4위전 입력 (반이 3개 이상일 때만)
+        if (hasSf && sf && sf.b) {
+          const rSf = getR(sf.id);
+          const winA = rSf.win==='A', winB = rSf.win==='B';
+          const sfA = preRanks[2]||sf.a, sfB = preRanks[3]||sf.b;
+          h += `<div style="background:#f8faff;border-radius:8px;padding:10px;margin-bottom:6px">
+            <p style="font-size:11px;color:#888;margin-bottom:6px">🥉 3,4위전 승리팀 선택 (예선 3,4위)</p>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <button class="win-pick-btn${winA?' wpick-on':''}" onclick="pickWinner('${sf.id}','A')">${g}학년 ${sfA} 승</button>
+              <button class="win-pick-btn${winB?' wpick-on':''}" onclick="pickWinner('${sf.id}','B')">${g}학년 ${sfB} 승</button>
+              ${sfDone?`<button class="cancel-btn" style="font-size:11px" onclick="clearWinner('${sf.id}')">초기화</button>`:''}
+            </div>
+          </div>`;
+        }
+      }
+
+      // ── 순위 카드 표시 ──
+      h += `<div class="sfgrid" style="grid-template-columns:repeat(${numShow},1fr)">`;
+      for (let i=0; i<numShow; i++) {
         const isDone = i < 2 ? finDone : sfDone;
-        const tbd = !team || !isDone;
+        const team = ranks[i];
         const pts = rankPts[i] || 1;
-        const teamDisp = team ? `${g}학년 ${team}` : '미정';
+        const tbd = !team || !isDone;
+        // 미정이지만 예선순위 알 경우 서브텍스트 표시
+        const sub = tbd && preRanks[i] ? `<div style="font-size:10px;color:#aaa;margin-top:1px">예선 ${i+1}위</div>` : '';
+        const teamDisp = !tbd ? `${g}학년 ${team}` : (preRanks[i] ? `${g}학년 ${preRanks[i]}` : '미정');
         h += `<div class="sfcard ${rankCls[i]||''}${tbd?' sfc-tbd':''}">
           <div class="sfc-rank">${medals[i]||''}</div>
           <div class="sfc-team">${teamDisp}</div>
-          <div class="sfc-pts">${pts}점</div>
+          ${sub}
+          <div class="sfc-pts">${tbd?'미정':pts+'점'}</div>
         </div>`;
-      });
+      }
       h += `</div></div>`;
     });
 
-    // ── 레이저런: 순위 직접 입력 ──
+    // ── 배구/피구: 미실시 안내 ──
+    ['배구','피구'].forEach(sp => {
+      const icon = sportInfo[sp];
+      h += `<div class="sport-final-wrap">
+        <h4><span class="sport-icon">${icon}</span>${sp}</h4>
+        <div style="background:#f8faff;border-radius:8px;padding:10px 14px;font-size:12px;color:#888;border:0.5px dashed #dde3f0">
+          ⏳ 아직 실시하지 않은 종목입니다.
+        </div>
+      </div>`;
+    });
+    // ── 레이저런: 미실시 안내 / 관리자는 순위 입력 가능 ──
     {
       const lr = (fbData.laser_rank || {})[`g${g}`] || {};
       const lrCls = GRADES[g].cls;
-      const numRanks = lrCls.length; // 1학년=3, 2,3학년=4
+      const numRanks = lrCls.length;
+      const hasAnyRank = Object.keys(lr).length > 0;
       h += `<div class="sport-final-wrap">
         <h4><span class="sport-icon">🎯</span>레이저런</h4>`;
       if (isAdmin) {
@@ -635,14 +688,14 @@ function renderTot() {
           const pts = rankPts[ri] || 1;
           h += `<div style="display:flex;align-items:center;gap:8px">
             <span style="font-size:12px;font-weight:700;min-width:48px">${medals[ri]} ${pts}점</span>
-            <select class="laser-sel" id="lr_${g}_${ri+1}" onchange="saveLaserRank(${g},${ri+1})" style="flex:1;padding:5px 8px;font-size:13px;border:1.5px solid #dde3f0;border-radius:6px;background:#fff;font-family:inherit">
+            <select id="lr_${g}_${ri+1}" onchange="saveLaserRank(${g},${ri+1})" style="flex:1;padding:5px 8px;font-size:13px;border:1.5px solid #dde3f0;border-radius:6px;background:#fff;font-family:inherit">
               <option value="">-- 선택 --</option>
               ${lrCls.map(c=>`<option value="${c}" ${curVal===c?'selected':''}>${g}학년 ${c}</option>`).join('')}
             </select>
           </div>`;
         }
         h += `</div>`;
-      } else {
+      } else if (hasAnyRank) {
         h += `<div class="sfgrid" style="grid-template-columns:repeat(${numRanks},1fr)">`;
         for (let ri=0; ri<numRanks; ri++) {
           const team = lr[`r${ri+1}`] || null;
@@ -655,6 +708,10 @@ function renderTot() {
           </div>`;
         }
         h += `</div>`;
+      } else {
+        h += `<div style="background:#f8faff;border-radius:8px;padding:10px 14px;font-size:12px;color:#888;border:0.5px dashed #dde3f0">
+          ⏳ 아직 실시하지 않은 종목입니다.
+        </div>`;
       }
       h += `</div>`;
     }
@@ -663,7 +720,7 @@ function renderTot() {
     const tot = calcTot(g);
     h += `<div style="border-top:0.5px solid #eef0f6;margin-top:4px;padding-top:12px">
       <h3 style="margin-bottom:6px">${g}학년 종합 순위</h3>
-      <p style="font-size:11px;color:#888;margin-bottom:10px">종목별 순위 점수 합산 (1위=4점 · 2위=3점 · 3위=2점 · 4위=1점)</p>
+      <p style="font-size:11px;color:#888;margin-bottom:10px">현재 실시 종목 순위 점수 합산 (1위=4점 · 2위=3점 · 3위=2점 · 4위=1점)</p>
       <div class="pgrid">`;
     tot.forEach((row,i) => {
       const rc=i===0?'r1c':i===1?'r2c':i===2?'r3c':'';
@@ -672,7 +729,7 @@ function renderTot() {
         <div class="pr">${med} ${i+1}위</div>
         <div class="pt">${g}학년 ${row.cls}</div>
         <div class="pp">${row.pts}점</div>
-        <div class="pd">/ 최대 ${cls.length===3?12:16}점</div>
+        <div class="pd">/ 티볼 기준</div>
       </div>`;
     });
     h += `</div></div></div>`;
