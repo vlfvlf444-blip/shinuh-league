@@ -601,6 +601,66 @@ function renderGame(g, grade) {
   </div>`;
 }
 
+function renderLaserRun() {
+  const rankPts = [4,3,2,1];
+  const medals = ['🥇','🥈','🥉','4위'];
+  const rankCls = ['sfc-r1','sfc-r2','sfc-r3',''];
+  let h = `<div class="tot-wrap">`;
+
+  [1,2,3].forEach(g => {
+    const cls = GRADES[g].cls;
+    const numRanks = cls.length;
+    const lr = (fbData.laser_rank || {})[`g${g}`] || {};
+    h += `<div class="tot-sec">
+      <h3 style="margin-bottom:4px">${g}학년 레이저런 순위</h3>
+      <p style="font-size:11px;color:#888;margin-bottom:10px">🎯 레이저런은 학년별 순위로만 운영됩니다.</p>`;
+
+    if (isAdmin) {
+      // 관리자: 드롭다운으로 순위 직접 입력
+      h += `<div style="display:flex;flex-direction:column;gap:8px;background:#f8faff;border-radius:10px;padding:12px;margin-bottom:10px">
+        <p style="font-size:11px;color:var(--cp);font-weight:600;margin-bottom:2px">✏️ 순위를 직접 선택하세요</p>`;
+      for (let ri = 0; ri < numRanks; ri++) {
+        const curVal = lr[`r${ri+1}`] || '';
+        const pts = rankPts[ri] || 1;
+        // 이미 선택된 반 목록 (현재 순위 제외)
+        h += `<div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:13px;font-weight:700;min-width:56px;color:${ri===0?'var(--cg)':ri===1?'#888780':ri===2?'#854F0B':'#555'}">${medals[ri]} ${pts}점</span>
+          <select id="lr_${g}_${ri+1}" onchange="saveLaserRank(${g},${ri+1})"
+            style="flex:1;padding:6px 10px;font-size:13px;border:1.5px solid #dde3f0;border-radius:7px;background:#fff;font-family:inherit;color:#1a1a2e">
+            <option value="">-- 선택 --</option>
+            ${cls.map(c => `<option value="${c}" ${curVal===c?'selected':''}>${g}학년 ${c}</option>`).join('')}
+          </select>
+          ${curVal ? `<span style="font-size:12px;color:var(--cw);font-weight:600">✓ ${g}학년 ${curVal}</span>` : ''}
+        </div>`;
+      }
+      h += `</div>`;
+    }
+
+    // 순위 카드 (관리자/참여자 모두 표시)
+    const hasAny = Object.values(lr).some(v => v);
+    if (hasAny || isAdmin) {
+      h += `<div class="sfgrid" style="grid-template-columns:repeat(${numRanks},1fr)">`;
+      for (let ri = 0; ri < numRanks; ri++) {
+        const team = lr[`r${ri+1}`] || null;
+        const pts = rankPts[ri] || 1;
+        const tbd = !team;
+        h += `<div class="sfcard ${rankCls[ri]||''}${tbd?' sfc-tbd':''}">
+          <div class="sfc-rank">${medals[ri]}</div>
+          <div class="sfc-team">${team ? `${g}학년 ${team}` : '미정'}</div>
+          <div class="sfc-pts">${tbd ? '–' : pts+'점'}</div>
+        </div>`;
+      }
+      h += `</div>`;
+    } else {
+      h += `<div style="background:#f8faff;border-radius:8px;padding:10px 14px;font-size:12px;color:#888;border:0.5px dashed #dde3f0">
+        ⏳ 아직 순위가 입력되지 않았습니다.
+      </div>`;
+    }
+    h += `</div>`;
+  });
+  return h + `</div>`;
+}
+
 function renderTot() {
   const sportInfo = {티볼:'⚾',배구:'🏐',피구:'🔴',레이저런:'🎯'};
   const rankPts = [4,3,2,1];
@@ -756,14 +816,15 @@ function renderTot() {
 }
 
 function render() {
-  const sports = ['티볼','배구','피구','종합'];
-  const icons = {티볼:'⚾',배구:'🏐',피구:'🔴',종합:'📊'};
+  const sports = ['티볼','배구','피구','레이저런','종합'];
+  const icons = {티볼:'⚾',배구:'🏐',피구:'🔴',레이저런:'🎯',종합:'📊'};
   document.getElementById('tabs').innerHTML = sports.map(s =>
     `<button class="tab${curSport===s?' on':''}" onclick="selSport('${s}')">${icons[s]} ${s}</button>`
   ).join('');
 
   const el = document.getElementById('main');
   if (curSport === '종합') { el.innerHTML = renderTot(); return; }
+  if (curSport === '레이저런') { el.innerHTML = renderLaserRun(); return; }
 
   const gkeys = Object.keys(DEFAULT_GAMES[curSport]||{}).map(Number);
   let h = `<div class="gbtn-row">${gkeys.map(g =>
