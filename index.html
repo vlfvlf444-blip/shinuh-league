@@ -486,24 +486,24 @@ function calcTot(grade) {
 }
 
 /* ── 렌더 ── */
-function renderStd(sport, grade) {
+function renderStd(sport, grade) {  // sport 인수 이미 있음
   const rows = calcStd(sport, grade);
   let h = `<div class="std-wrap"><table class="std-tbl"><thead><tr>
     <th style="width:38px">순위</th><th>반</th>
     <th style="width:30px">승</th><th style="width:30px">무</th><th style="width:30px">패</th>
-    <th style="width:36px">득점</th><th style="width:36px">실점</th><th style="width:36px">득실</th><th style="width:36px">승점</th>
+    ${sport!=='피구'?'<th style="width:36px">득점</th><th style="width:36px">실점</th><th style="width:36px">득실</th>':''}<th style="width:36px">승점</th>
   </tr></thead><tbody>`;
   rows.forEach((r,i) => {
     const rc=i===0?'r1':i===1?'r2':i===2?'r3':'';
     const med=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
     h+=`<tr><td class="${rc}">${med}${i+1}</td><td class="tnm">${grade}학년 ${r.cls}</td>
       <td>${r.w}</td><td>${r.d}</td><td>${r.l}</td>
-      <td>${r.gf}</td><td>${r.ga}</td><td style="color:${r.gf-r.ga>0?'var(--cw)':r.gf-r.ga<0?'var(--cl)':'#888'}">${r.gf-r.ga>0?'+':''}${r.gf-r.ga}</td><td style="font-weight:700">${r.pts}</td></tr>`;
+      ${sport!=='피구'?`<td>${r.gf}</td><td>${r.ga}</td><td style="color:${r.gf-r.ga>0?'var(--cw)':r.gf-r.ga<0?'var(--cl)':'#888'}">${r.gf-r.ga>0?'+':''}${r.gf-r.ga}</td>`:''}<td style="font-weight:700">${r.pts}</td></tr>`;
   });
   return h + `</tbody></table></div>`;
 }
 
-function renderGame(g, grade) {
+function renderGame(g, grade, sport) {
   const r = getR(g.id);
   const dInfo = getD(g.id);
   const dispDate = dInfo ? dInfo.val : g.orig;
@@ -524,6 +524,7 @@ function renderGame(g, grade) {
   const typeCls = g.type==='예선'?'b-pre':g.type==='결승'?'b-fin':'b-sf';
   const isDone = r.win !== '';
   const isFinal = g.type === '결승' || g.type === '3,4위전';
+  const hideScore = isFinal || sport === '피구';
 
   let dateEditHtml = '';
   if (isAdmin && editingDate === g.id) {
@@ -542,7 +543,7 @@ function renderGame(g, grade) {
   if (!canScore) {
     scoreHtml = `<div class="inp-row"><span class="viewer-score">일정 추후 공지</span></div>`;
   } else if (isAdmin) {
-    if (isFinal) {
+    if (hideScore) {
       const winA = r.win==='A', winB = r.win==='B';
       scoreHtml = `<div class="inp-row" style="flex-wrap:wrap;gap:6px">
         <span style="font-size:11px;color:#888">승리팀 선택:</span>
@@ -561,7 +562,7 @@ function renderGame(g, grade) {
       </div>`;
     }
   } else {
-    if (isFinal) {
+    if (hideScore) {
       scoreHtml = isDone
         ? `<div class="inp-row">${sbadge}</div>`
         : `<div class="inp-row"><span class="viewer-score">경기 결과 대기 중</span></div>`;
@@ -589,12 +590,12 @@ function renderGame(g, grade) {
     <div class="gteams">
       <div class="${tac}">
         <div class="cls">${grade}학년 ${g.a}</div>
-        ${canScore&&!isFinal?`<div class="sc">${r.sa!==''?r.sa:'-'}</div>`:''}
+        ${canScore&&!hideScore?`<div class="sc">${r.sa!==''?r.sa:'-'}</div>`:''}
       </div>
       <div class="vs">VS</div>
       <div class="${tbc}">
         <div class="cls">${g.b?grade+'학년 '+g.b:''}</div>
-        ${canScore&&!isFinal?`<div class="sc">${r.sb!==''?r.sb:'-'}</div>`:''}
+        ${canScore&&!hideScore?`<div class="sc">${r.sb!==''?r.sb:'-'}</div>`:''}
       </div>
     </div>
     ${scoreHtml}
@@ -847,11 +848,11 @@ function render() {
     <span class="legend-item"><span class="ldot" style="background:var(--cd)"></span>무승부</span>
     <span class="legend-item"><span class="ldot" style="background:#ccc"></span>미정</span>
   </div>`;
-  h += `<div class="glist">${pre.map(g => renderGame(g, curGrade)).join('')}</div>`;
+  h += `<div class="glist">${pre.map(g => renderGame(g, curGrade, curSport)).join('')}</div>`;
 
   if (rest.length) {
     h += `<div class="sec-title">🏆 결선 경기</div>
-      <div class="glist">${rest.map(g => renderGame(g, curGrade)).join('')}</div>`;
+      <div class="glist">${rest.map(g => renderGame(g, curGrade, curSport)).join('')}</div>`;
   }
   el.innerHTML = h;
 }
