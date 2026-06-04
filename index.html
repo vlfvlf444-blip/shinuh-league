@@ -432,10 +432,12 @@ function calcSportFinal(sport, grade) {
   let rank1=null, rank2=null, rank3=null, rank4=null;
 
   // 결승 결과: fin.a/fin.b 기준으로 승패 해석 (실제 반이름 그대로 사용)
+  // 예선 경기가 모두 완료된 경우에만 결승 팀 확정
+  const preGames = games.filter(g2 => g2.type === '예선');
+  const preAllDone = preGames.length > 0 && preGames.every(g2 => !!getR(g2.id).win);
   const hasFinResult = !!getR(fin?.id||'').win;
-  if (fin) {
+  if (fin && preAllDone) {
     const r = getR(fin.id);
-    // gA/gB: 예선순위로 교체된 팀 이름 사용 (renderGame과 일치)
     const finA = (preRank[0] ? preRank[0].cls : fin.a);
     const finB = (preRank[1] ? preRank[1].cls : fin.b);
     if (r.win==='A')      { rank1=finA; rank2=finB; }
@@ -458,10 +460,12 @@ function calcSportFinal(sport, grade) {
   } else {
     const r = getR(sf.id);
     sfDone = !!r.win;
-    const sfA = (preRank[2] ? preRank[2].cls : sf.a);
-    const sfB = (preRank[3] ? preRank[3].cls : sf.b);
-    if (r.win==='A')      { rank3=sfA; rank4=sfB; }
-    else if (r.win==='B') { rank3=sfB; rank4=sfA; }
+    if (preAllDone) {
+      const sfA = (preRank[2] ? preRank[2].cls : sf.a);
+      const sfB = (preRank[3] ? preRank[3].cls : sf.b);
+      if (r.win==='A')      { rank3=sfA; rank4=sfB; }
+      else if (r.win==='B') { rank3=sfB; rank4=sfA; }
+    }
   }
 
   return {
@@ -508,16 +512,21 @@ function renderStd(sport, grade) {  // sport 인수 이미 있음
 }
 
 function renderGame(g, grade, sport) {
-  // 결승/3,4위전: 예선 순위로 팀 이름 자동 교체
+  // 결승/3,4위전: 예선 경기가 모두 끝난 경우에만 팀 이름 자동 교체
   let gA = g.a, gB = g.b;
   if (g.type === '결승' || g.type === '3,4위전') {
-    const preRank = calcStd(sport, grade);
-    if (g.type === '결승') {
-      gA = preRank[0] ? preRank[0].cls : g.a;
-      gB = preRank[1] ? preRank[1].cls : g.b;
-    } else { // 3,4위전
-      gA = preRank[2] ? preRank[2].cls : g.a;
-      gB = preRank[3] ? preRank[3].cls : g.b;
+    const allGames = (DEFAULT_GAMES[sport]||{})[grade] || [];
+    const preGames = allGames.filter(g2 => g2.type === '예선');
+    const preAllDone = preGames.length > 0 && preGames.every(g2 => !!getR(g2.id).win);
+    if (preAllDone) {
+      const preRank = calcStd(sport, grade);
+      if (g.type === '결승') {
+        gA = preRank[0] ? preRank[0].cls : g.a;
+        gB = preRank[1] ? preRank[1].cls : g.b;
+      } else { // 3,4위전
+        gA = preRank[2] ? preRank[2].cls : g.a;
+        gB = preRank[3] ? preRank[3].cls : g.b;
+      }
     }
   }
   const r = getR(g.id);
