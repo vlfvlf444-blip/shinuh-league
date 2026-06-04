@@ -2,889 +2,996 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026 신어중학교 스포츠클럽 리그전</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PAPS 2026">
+<meta name="theme-color" content="#0f4c81">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>2026. 학생건강체력평가</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Noto Sans KR',sans-serif;background:#f4f6fb;color:#1a1a2e;min-height:100vh}
-:root{
-  --cp:#1a56a0;--cpl:#e6f1fb;--cpd:#0c3d78;
-  --cw:#3B6D11;--cwb:#EAF3DE;
-  --cl:#A32D2D;--clb:#FCEBEB;
-  --cd:#185FA5;--cdb:#E6F1FB;
-  --cy:#5F5E5A;--cyb:#F1EFE8;
-  --cg:#BA7517;--cgb:#FAEEDA;
-  --rain:#e24b4a;
-}
-.app{max-width:860px;margin:0 auto;padding:12px}
-.hdr{background:#fff;border-radius:12px;padding:20px 16px 16px;margin-bottom:12px;border:0.5px solid #dde3f0;text-align:center}
-.hdr h1{font-size:18px;font-weight:700;color:var(--cp);line-height:1.5}
-.hdr p{font-size:12px;color:#666;margin-top:4px}
-.mode-badge{display:inline-block;margin-top:8px;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px}
-.mode-badge.admin{background:#fff3cd;color:#856404;border:1px solid #ffc107}
-.mode-badge.viewer{background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:1000}
-.modal{background:#fff;border-radius:14px;padding:28px 24px;width:320px;max-width:90vw}
-.modal h2{font-size:17px;font-weight:700;color:var(--cp);margin-bottom:6px}
-.modal p{font-size:13px;color:#666;margin-bottom:18px;line-height:1.6}
-.modal input{width:100%;padding:10px 12px;font-size:14px;border:1.5px solid #dde3f0;border-radius:8px;margin-bottom:10px;outline:none;font-family:inherit}
-.modal input:focus{border-color:var(--cp)}
-.modal .btn-row{display:flex;gap:8px}
-.btn-primary{flex:1;padding:10px;font-size:14px;font-weight:700;background:var(--cp);color:#fff;border:none;border-radius:8px;cursor:pointer}
-.btn-primary:hover{background:var(--cpd)}
-.btn-secondary{flex:1;padding:10px;font-size:14px;font-weight:600;background:#f1f3f9;color:#555;border:1px solid #dde3f0;border-radius:8px;cursor:pointer}
-.modal .err{font-size:12px;color:#c0392b;margin-bottom:8px;display:none}
-.mode-selector{background:#fff;border-radius:12px;padding:12px 16px;margin-bottom:10px;border:0.5px solid #dde3f0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.mode-selector span{font-size:13px;color:#555;flex:1}
-.btn-sm{padding:6px 14px;font-size:12px;font-weight:600;border-radius:7px;cursor:pointer;border:1px solid #dde3f0;font-family:inherit}
-.btn-login{background:var(--cp);color:#fff;border-color:var(--cp)}
-.btn-login:hover{background:var(--cpd)}
-.btn-logout{background:#f1f3f9;color:#555}
-.conn-bar{display:flex;align-items:center;gap:6px;font-size:11px;color:#888;padding:6px 10px;background:#fff;border-radius:8px;margin-bottom:8px;border:0.5px solid #eee}
-.conn-dot{width:8px;height:8px;border-radius:50%;background:#ccc}
-.conn-dot.ok{background:#4caf50}.conn-dot.err{background:#e53935}.conn-dot.loading{background:#ff9800}
-.tabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap;background:#fff;border-radius:10px;padding:8px;border:0.5px solid #dde3f0}
-.tab{flex:1;min-width:56px;padding:8px 4px;font-size:12px;font-weight:600;border:1.5px solid transparent;border-radius:8px;background:transparent;color:#666;cursor:pointer;font-family:inherit}
-.tab.on{background:var(--cp);color:#fff}
-.gbtn-row{display:flex;gap:6px;margin-bottom:10px}
-.gbtn{flex:1;padding:8px;font-size:13px;font-weight:600;border:1.5px solid #dde3f0;border-radius:8px;background:#fff;color:#666;cursor:pointer;font-family:inherit}
-.gbtn.on{background:var(--cpl);color:var(--cp);border-color:var(--cp)}
-.sec-title{font-size:13px;font-weight:700;color:#1a1a2e;margin:12px 0 7px;padding-left:10px;border-left:3px solid var(--cp);display:flex;align-items:center;gap:6px}
-.sec-title small{font-size:11px;font-weight:400;color:#888}
-.std-wrap{background:#fff;border-radius:10px;border:0.5px solid #dde3f0;overflow:hidden;margin-bottom:12px}
-.std-tbl{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
-.std-tbl th{background:var(--cp);color:#fff;padding:7px 4px;text-align:center;font-weight:600}
-.std-tbl td{padding:7px 4px;text-align:center;border-bottom:0.5px solid #eef0f6}
-.std-tbl tr:last-child td{border-bottom:none}
-.std-tbl tr:nth-child(even) td{background:#f8faff}
-.std-tbl .tnm{text-align:left;font-weight:600;padding-left:10px}
-.r1{color:var(--cg);font-weight:700}.r2{color:#888780;font-weight:600}.r3{color:#854F0B;font-weight:600}
-.glist{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
-.gc{background:#fff;border:0.5px solid #dde3f0;border-radius:10px;padding:10px 12px}
-.gc.rained{border-color:var(--rain);border-width:1px}
-.gc.done{border-left:3px solid var(--cw)}
-.ghd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:6px;flex-wrap:wrap}
-.gdate-area{display:flex;align-items:center;gap:6px;flex:1;min-width:0}
-.gdate{font-size:12px;color:#555}
-.gdate.changed{color:var(--rain);font-weight:600}
-.gbadge{font-size:10px;padding:2px 8px;border-radius:5px;font-weight:700}
-.b-pre{background:#e6f1fb;color:#185FA5}.b-fin{background:#FAEEDA;color:#BA7517}.b-sf{background:#FBEAF0;color:#993556}
-.edit-btn{font-size:11px;padding:3px 8px;border:1px solid #dde3f0;border-radius:5px;background:#f8faff;color:#666;cursor:pointer;font-family:inherit}
-.edit-btn:hover{background:#eef2ff;border-color:var(--cp);color:var(--cp)}
-.restore-btn{font-size:10px;padding:2px 7px;border:1px solid #fdd;border-radius:5px;background:#fff5f5;color:var(--rain);cursor:pointer;font-family:inherit}
-.date-edit-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap;background:#f8faff;border-radius:8px;padding:8px 10px}
-.date-input{font-size:13px;padding:5px 10px;border:1.5px solid #dde3f0;border-radius:6px;background:#fff;color:#1a1a2e;width:150px;font-family:inherit}
-.date-input:focus{outline:none;border-color:var(--cp)}
-.rain-chk{display:flex;align-items:center;gap:4px;font-size:12px;color:#666;cursor:pointer}
-.save-btn{padding:5px 12px;font-size:12px;font-weight:700;background:var(--cp);color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit}
-.save-btn:hover{background:var(--cpd)}
-.cancel-btn{padding:5px 10px;font-size:12px;background:#f1f3f9;color:#666;border:1px solid #dde3f0;border-radius:6px;cursor:pointer;font-family:inherit}
-.gteams{display:flex;align-items:stretch;gap:8px;margin-bottom:8px}
-.tb{flex:1;text-align:center;padding:8px 6px;border-radius:8px;background:#f4f6fb;border:1px solid #eef0f6}
-.tb .cls{font-size:13px;font-weight:700;color:#333}
-.tb .sc{font-size:20px;font-weight:700;margin-top:4px;color:#aaa}
-.tb.win{background:var(--cwb);border-color:#a5d6a7}.tb.win .cls{color:var(--cw)}.tb.win .sc{color:var(--cw)}
-.tb.lose{background:var(--clb);border-color:#f5c6c6}.tb.lose .cls{color:var(--cl)}.tb.lose .sc{color:var(--cl)}
-.tb.draw-t{background:var(--cdb);border-color:#90caf9}.tb.draw-t .sc{color:var(--cd)}
-.vs{font-size:13px;font-weight:700;color:#aaa;display:flex;align-items:center;padding:0 2px}
-.inp-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.sc-inp{width:54px;padding:5px 6px;font-size:16px;text-align:center;border:1.5px solid #dde3f0;border-radius:7px;background:#fff;color:#1a1a2e;font-family:inherit;font-weight:700}
-.sc-inp:focus{outline:none;border-color:var(--cp)}
-.sbadge{font-size:11px;padding:3px 9px;border-radius:10px;font-weight:700}
-.bw{background:var(--cwb);color:var(--cw)}.bl{background:var(--clb);color:var(--cl)}.bd{background:var(--cdb);color:var(--cd)}.by{background:var(--cyb);color:var(--cy)}
-.viewer-score{font-size:11px;color:#888}
-.win-pick-btn{padding:5px 12px;font-size:12px;font-weight:600;border:1.5px solid #dde3f0;border-radius:7px;background:#f8faff;color:#555;cursor:pointer;font-family:inherit}
-.win-pick-btn:hover{background:var(--cwb);border-color:var(--cw);color:var(--cw)}
-.win-pick-btn.wpick-on{background:var(--cwb);border-color:var(--cw);color:var(--cw);font-weight:700}
+  :root {
+    --primary: #0f4c81;
+    --primary-light: #1a6bb5;
+    --secondary: #e8f4fd;
+    --accent: #ff6b35;
+    --success: #28a745;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --grade1: #1565c0;
+    --grade2: #2e7d32;
+    --grade3: #f57f17;
+    --grade4: #e65100;
+    --grade5: #b71c1c;
+    --shadow: 0 2px 12px rgba(0,0,0,0.12);
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Apple SD Gothic Neo', 'Nanum Gothic', sans-serif; background: #f0f4f8; color: #1a1a2e; min-height: 100vh; }
 
-.tot-wrap{display:flex;flex-direction:column;gap:10px;margin-top:4px}
-.tot-sec{background:#fff;border-radius:10px;padding:14px;border:0.5px solid #dde3f0}
-.tot-sec h3{font-size:14px;font-weight:700;color:var(--cp);margin-bottom:4px}
-.tot-sec p{font-size:11px;color:#888;margin-bottom:10px}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
-.pc{border:0.5px solid #dde3f0;border-radius:9px;padding:10px;text-align:center;background:#f8faff}
-.pc .pr{font-size:11px;color:#888;margin-bottom:2px}
-.pc .pt{font-size:14px;font-weight:700;color:#1a1a2e}
-.pc .pp{font-size:22px;font-weight:700;color:var(--cp)}
-.pc .pd{font-size:10px;color:#aaa;margin-top:2px}
-.pc.r1c{border-color:var(--cg);border-width:1.5px;background:#fffdf5}
-.pc.r2c{border-color:#888780;border-width:1.5px}
-.pc.r3c{border-color:#854F0B;border-width:1.5px}
-.sport-final-wrap{margin-bottom:14px}
-.sport-final-wrap h4{font-size:13px;font-weight:700;color:#1a1a2e;margin:0 0 8px;padding-left:8px;border-left:3px solid var(--cg)}
-.sfgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:4px}
-.sfcard{border-radius:8px;padding:8px 6px;text-align:center;border:0.5px solid #dde3f0;background:#f8faff}
-.sfcard .sfc-rank{font-size:11px;color:#888;margin-bottom:2px}
-.sfcard .sfc-team{font-size:13px;font-weight:700;color:#1a1a2e}
-.sfcard .sfc-pts{font-size:15px;font-weight:700;color:var(--cp);margin-top:2px}
-.sfcard.sfc-r1{border-color:var(--cg);border-width:1.5px;background:#fffdf5}
-.sfcard.sfc-r2{border-color:#888780;border-width:1.5px;background:#fafafa}
-.sfcard.sfc-r3{border-color:#854F0B;border-width:1.5px}
-.sfcard.sfc-tbd{opacity:0.5}
-.sport-icon{font-size:13px;margin-right:4px}
-.legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
-.legend-item{display:flex;align-items:center;gap:4px;font-size:11px;color:#888}
-.ldot{width:8px;height:8px;border-radius:50%}
-@media(max-width:480px){
-  .hdr h1{font-size:15px}.tab{font-size:11px;padding:6px 2px}
-  .tb .cls{font-size:12px}.tb .sc{font-size:17px}.date-input{width:130px}
-}
+  /* ── PIN Modal ── */
+  #pinModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; }
+  #pinModal.show { display:flex; }
+  .pin-box { background:#fff; border-radius:20px; padding:32px 28px; text-align:center; width:320px; box-shadow:0 8px 32px rgba(0,0,0,0.3); }
+  .pin-title { font-size:18px; font-weight:700; color:var(--primary); margin-bottom:8px; }
+  .pin-sub { font-size:13px; color:#666; margin-bottom:20px; }
+  .pin-display { background:#f5f7fa; border:2px solid #e0e0e0; border-radius:10px; padding:14px; font-size:28px; letter-spacing:8px; color:#333; min-height:56px; margin-bottom:20px; font-weight:700; }
+  .pin-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .pin-btn { padding:16px; font-size:20px; font-weight:600; border:none; border-radius:10px; cursor:pointer; background:#f0f4f8; color:#333; transition:all .15s; -webkit-tap-highlight-color: transparent; }
+  .pin-btn:active { background:#d0dce8; transform:scale(0.95); }
+  .pin-btn.zero { grid-column:2; }
+  .pin-btn.cancel { background:#ffebee; color:#c62828; }
+  .pin-btn.del { background:#fff3e0; color:#e65100; }
+  .pin-btn.confirm { background:var(--primary); color:#fff; grid-column:3; }
+
+  /* ── Top Bar ── */
+  .topbar { background:var(--primary); color:#fff; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 8px rgba(0,0,0,0.2); }
+  .topbar-title { font-size:14px; font-weight:700; letter-spacing:0.5px; }
+  .topbar-year { font-size:11px; opacity:0.8; }
+  .admin-badge { background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); border-radius:20px; padding:4px 12px; font-size:12px; cursor:pointer; transition:all .2s; -webkit-tap-highlight-color: transparent; }
+  .admin-badge:active { background:rgba(255,255,255,0.35); }
+  .admin-badge.active { background:#ffc107; color:#333; border-color:#ffc107; }
+
+  /* ── Tabs ── */
+  .tabs { display:flex; background:#fff; border-bottom:2px solid #e0e8f0; position:sticky; top:52px; z-index:99; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+  .tab { flex:1; padding:12px 4px; text-align:center; font-size:12px; font-weight:600; color:#888; cursor:pointer; border-bottom:3px solid transparent; transition:all .2s; -webkit-tap-highlight-color: transparent; }
+  .tab.active { color:var(--primary); border-bottom-color:var(--primary); }
+
+  /* ── Content ── */
+  .content { display:none; padding:16px; max-width:720px; margin:0 auto; }
+  .content.active { display:block; }
+
+  /* ── Cards ── */
+  .card { background:#fff; border-radius:var(--radius); padding:16px; margin-bottom:14px; box-shadow:var(--shadow); }
+  .card-title { font-size:14px; font-weight:700; color:var(--primary); margin-bottom:12px; display:flex; align-items:center; gap:6px; }
+
+  /* ── Home ── */
+  .hero { background:linear-gradient(135deg,var(--primary),var(--primary-light)); color:#fff; border-radius:var(--radius); padding:24px 20px; margin-bottom:16px; text-align:center; }
+  .hero h1 { font-size:15px; letter-spacing:2px; opacity:0.9; margin-bottom:6px; }
+  .hero h2 { font-size:22px; font-weight:800; margin-bottom:4px; }
+  .hero p { font-size:12px; opacity:0.8; line-height:1.6; }
+
+  .select-row { display:flex; gap:10px; margin-bottom:12px; }
+  .select-row select { flex:1; padding:12px; border:2px solid #e0e8f0; border-radius:10px; font-size:15px; color:#333; background:#fff; -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+  .select-row select:focus { outline:none; border-color:var(--primary); }
+
+  .start-btn { width:100%; padding:16px; background:var(--primary); color:#fff; border:none; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer; transition:all .2s; box-shadow:0 4px 12px rgba(15,76,129,0.3); -webkit-tap-highlight-color: transparent; display: block; touch-action: manipulation; }
+  .start-btn:active, .start-btn:focus { background:var(--primary-light); transform:scale(0.98); outline: none; }
+
+  /* ── Progress ── */
+  .progress-bar-wrap { background:#e8f4fd; border-radius:20px; height:8px; overflow:hidden; margin:8px 0; }
+  .progress-bar-fill { height:100%; background:linear-gradient(90deg,var(--primary),var(--primary-light)); border-radius:20px; transition:width .4s; }
+  .progress-text { font-size:12px; color:#666; text-align:right; }
+  .class-item { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:#f5f9ff; border-radius:8px; margin-bottom:8px; }
+
+  /* ── Measure ── */
+  .nav-row { display:flex; gap:8px; justify-content:space-between; align-items:center; margin-bottom:14px; }
+  .nav-btn { padding:10px 16px; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; background:#e8f4fd; color:var(--primary); flex:1; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  .nav-btn:active { background:#d0e8fa; }
+  .nav-btn.disabled { opacity:0.4; pointer-events:none; }
+
+  .student-card { background:linear-gradient(135deg,#f0f8ff,#e8f4fd); border:2px solid #c8e0f4; border-radius:var(--radius); padding:16px; margin-bottom:14px; }
+  .student-info { display:flex; justify-content:space-between; align-items:center; }
+  .student-num { font-size:24px; font-weight:800; color:var(--primary); }
+  .student-gender { font-size:22px; }
+  .student-name { font-size:18px; font-weight:700; }
+
+  .input-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .input-group { background:#f5f9ff; border-radius:10px; padding:12px; }
+  .input-label { font-size:11px; color:#666; font-weight:600; margin-bottom:6px; }
+  .input-field { display:flex; align-items:center; gap:6px; }
+  .input-field input { flex:1; padding:10px; border:2px solid #d0e0f0; border-radius:8px; font-size:16px; text-align:center; background:#fff; -webkit-tap-highlight-color: transparent; }
+  .input-field input:focus { outline:none; border-color:var(--primary); }
+  .input-unit { font-size:11px; color:#888; white-space:nowrap; }
+
+  .memo-area { width:100%; padding:10px; border:2px solid #d0e0f0; border-radius:8px; font-size:14px; resize:none; background:#fff; }
+  .memo-area:focus { outline:none; border-color:var(--primary); }
+
+  .save-btn { width:100%; padding:16px; background:var(--success); color:#fff; border:none; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer; margin-top:8px; transition:all .2s; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  .save-btn:active { background:#218838; transform:scale(0.98); }
+
+  /* ── Dashboard ── */
+  .stats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
+  .stat-card { background:#fff; border-radius:10px; padding:14px 10px; text-align:center; box-shadow:var(--shadow); }
+  .stat-num { font-size:24px; font-weight:800; color:var(--primary); }
+  .stat-label { font-size:11px; color:#888; margin-top:4px; }
+  .filter-tabs { display:flex; gap:6px; margin-bottom:12px; overflow-x:auto; padding-bottom:4px; }
+  .filter-tab { padding:6px 14px; border-radius:20px; background:#e8f4fd; color:#555; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; border:none; -webkit-tap-highlight-color: transparent; }
+  .filter-tab.active { background:var(--primary); color:#fff; }
+  .class-filter { display:flex; gap:6px; overflow-x:auto; padding-bottom:4px; margin-bottom:14px; }
+  .class-filter-btn { padding:5px 12px; border-radius:20px; background:#f0f4f8; color:#555; font-size:11px; cursor:pointer; white-space:nowrap; border:none; -webkit-tap-highlight-color: transparent; }
+  .class-filter-btn.active { background:var(--primary-light); color:#fff; }
+
+  /* ── Table ── */
+  .table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:10px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; min-width:520px; }
+  th { background:var(--primary); color:#fff; padding:10px 8px; text-align:center; font-weight:600; white-space:nowrap; }
+  td { padding:8px; text-align:center; border-bottom:1px solid #eee; white-space:nowrap; }
+  tr:nth-child(even) td { background:#f9fbfd; }
+  tr:hover td { background:#e8f4fd; }
+
+  /* Grade badges */
+  .g1 { background:#e3f2fd; color:#1565c0; border-radius:12px; padding:2px 8px; font-weight:700; }
+  .g2 { background:#e8f5e9; color:#2e7d32; border-radius:12px; padding:2px 8px; font-weight:700; }
+  .g3 { background:#fff8e1; color:#f57f17; border-radius:12px; padding:2px 8px; font-weight:700; }
+  .g4 { background:#fff3e0; color:#e65100; border-radius:12px; padding:2px 8px; font-weight:700; }
+  .g5 { background:#ffebee; color:#b71c1c; border-radius:12px; padding:2px 8px; font-weight:700; }
+
+  /* ── Admin panel ── */
+  .admin-panel { background:#fffbf0; border:2px solid #ffc107; border-radius:var(--radius); padding:16px; margin-bottom:14px; }
+  .admin-panel-title { font-size:14px; font-weight:700; color:#856404; margin-bottom:12px; }
+  .admin-btn { padding:10px 16px; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; -webkit-tap-highlight-color: transparent; }
+  .admin-btn:active { transform:scale(0.97); }
+  .btn-download { background:#0f9d58; color:#fff; }
+  .btn-reset { background:#dc3545; color:#fff; }
+  .admin-actions { display:flex; gap:10px; flex-wrap:wrap; }
+
+  /* PIN change */
+  .pin-change-form { margin-top:14px; padding-top:14px; border-top:1px solid #f0d060; }
+  .pin-change-form input { width:100%; padding:10px; border:2px solid #e0c840; border-radius:8px; font-size:15px; margin-bottom:8px; background:#fff; }
+  .pin-change-form input:focus { outline:none; border-color:var(--primary); }
+  .pin-save-btn { width:100%; padding:11px; background:var(--primary); color:#fff; border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; }
+
+  /* ── Grade counts ── */
+  .grade-counts { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:14px; }
+  .grade-count-card { border-radius:10px; padding:12px 6px; text-align:center; }
+  .grade-count-card.gc1 { background:#e3f2fd; }
+  .grade-count-card.gc2 { background:#e8f5e9; }
+  .grade-count-card.gc3 { background:#fff8e1; }
+  .grade-count-card.gc4 { background:#fff3e0; }
+  .grade-count-card.gc5 { background:#ffebee; }
+  .grade-count-num { font-size:22px; font-weight:800; }
+  .gc1 .grade-count-num { color:#1565c0; }
+  .gc2 .grade-count-num { color:#2e7d32; }
+  .gc3 .grade-count-num { color:#f57f17; }
+  .gc4 .grade-count-num { color:#e65100; }
+  .gc5 .grade-count-num { color:#b71c1c; }
+  .grade-count-label { font-size:11px; color:#666; margin-top:2px; }
+
+  /* ── Complete modal ── */
+  #completeModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:9998; justify-content:center; align-items:center; }
+  #completeModal.show { display:flex; }
+  .complete-box { background:#fff; border-radius:20px; padding:32px 24px; text-align:center; width:300px; }
+  .complete-icon { font-size:48px; margin-bottom:12px; }
+  .complete-title { font-size:20px; font-weight:800; color:var(--success); margin-bottom:6px; }
+  .complete-sub { font-size:13px; color:#666; margin-bottom:20px; }
+  .complete-btns { display:flex; gap:10px; }
+  .complete-btn { flex:1; padding:12px; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; -webkit-tap-highlight-color: transparent; }
+  .complete-btn.primary { background:var(--primary); color:#fff; }
+  .complete-btn.secondary { background:#e8f4fd; color:var(--primary); }
+
+  /* ── Delete modal ── */
+  #deleteModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:9998; justify-content:center; align-items:center; }
+  #deleteModal.show { display:flex; }
+  .delete-box { background:#fff; border-radius:20px; padding:28px 24px; text-align:center; width:300px; }
+  .delete-title { font-size:18px; font-weight:700; color:var(--danger); margin-bottom:10px; }
+  .delete-sub { font-size:13px; color:#666; margin-bottom:20px; line-height:1.6; }
+  .delete-btns { display:flex; gap:10px; }
+  .delete-btn { flex:1; padding:12px; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; -webkit-tap-highlight-color: transparent; }
+  .delete-btn.cancel-del { background:#f0f4f8; color:#555; }
+  .delete-btn.confirm-del { background:var(--danger); color:#fff; }
+
+  /* ── Toast ── */
+  #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.85); color:#fff; padding:12px 24px; border-radius:20px; font-size:13px; z-index:10000; opacity:0; transition:opacity .3s; pointer-events:none; white-space:nowrap; }
+  #toast.show { opacity:1; }
+
+  /* ── Section select for measure ── */
+  .subjects-wrap { display:flex; flex-wrap:wrap; gap:8px; }
+  .subject-tag { padding:7px 14px; background:#e8f4fd; color:var(--primary); border-radius:20px; font-size:13px; font-weight:600; cursor:pointer; border:2px solid transparent; -webkit-tap-highlight-color: transparent; }
+  .subject-tag.selected { background:var(--primary); color:#fff; border-color:var(--primary); }
+
+  @media (max-width:400px) {
+    .input-grid { grid-template-columns:1fr; }
+    .grade-counts { grid-template-columns:repeat(5,1fr); gap:4px; }
+    .grade-count-card { padding:8px 4px; }
+    .grade-count-num { font-size:18px; }
+  }
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<div class="app">
-  <div class="hdr">
-    <h1>🏆 2026학년도 신어중학교<br>스포츠클럽 리그전</h1>
-    <p>피구 · 배구 · 티볼 · 레이저런 | 학년별 리그전</p>
-    <div id="modeBadge" class="mode-badge viewer">👀 참여자 모드</div>
-  </div>
-  <div class="mode-selector">
-    <span id="modeDesc">경기 일정과 결과를 조회하고 있습니다.</span>
-    <button class="btn-sm btn-login" id="loginBtn" onclick="openLoginModal()">🔐 관리자 로그인</button>
-    <button class="btn-sm btn-logout" id="logoutBtn" style="display:none" onclick="doLogout()">로그아웃</button>
-  </div>
-  <div class="conn-bar">
-    <div class="conn-dot loading" id="connDot"></div>
-    <span id="connText">Firebase 연결 중...</span>
-  </div>
-  <div class="tabs" id="tabs"></div>
-  <div id="main"></div>
-</div>
 
-<div class="modal-overlay" id="loginModal" style="display:none">
-  <div class="modal">
-    <h2>🔐 관리자 로그인</h2>
-    <p>관리자 계정으로 로그인하면<br>경기 일정과 결과를 수정할 수 있습니다.</p>
-    <div class="err" id="loginErr">이메일 또는 비밀번호가 올바르지 않습니다.</div>
-    <input type="email" id="loginEmail" placeholder="이메일" autocomplete="username">
-    <input type="password" id="loginPw" placeholder="비밀번호" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
-    <div class="btn-row">
-      <button class="btn-primary" onclick="doLogin()">로그인</button>
-      <button class="btn-secondary" onclick="closeLoginModal()">취소</button>
+<!-- PIN Modal -->
+<div id="pinModal">
+  <div class="pin-box">
+    <div class="pin-title">🔐 관리자 인증</div>
+    <div class="pin-sub">PIN을 입력하세요</div>
+    <div class="pin-display" id="pinDisplay">　</div>
+    <div class="pin-grid">
+      <button class="pin-btn" onclick="pinInput('1')">1</button>
+      <button class="pin-btn" onclick="pinInput('2')">2</button>
+      <button class="pin-btn" onclick="pinInput('3')">3</button>
+      <button class="pin-btn" onclick="pinInput('4')">4</button>
+      <button class="pin-btn" onclick="pinInput('5')">5</button>
+      <button class="pin-btn" onclick="pinInput('6')">6</button>
+      <button class="pin-btn" onclick="pinInput('7')">7</button>
+      <button class="pin-btn" onclick="pinInput('8')">8</button>
+      <button class="pin-btn" onclick="pinInput('9')">9</button>
+      <button class="pin-btn cancel" onclick="closePin()">취소</button>
+      <button class="pin-btn zero" onclick="pinInput('0')">0</button>
+      <button class="pin-btn del" onclick="pinDel()">⌫</button>
+    </div>
+    <div style="margin-top:12px;">
+      <button class="pin-btn confirm" style="width:100%;padding:14px;border-radius:10px;" onclick="pinConfirm()">확인 ✓</button>
     </div>
   </div>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getDatabase, ref, set, onValue }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+<!-- Complete Modal -->
+<div id="completeModal">
+  <div class="complete-box">
+    <div class="complete-icon">✅</div>
+    <div class="complete-title">측정 완료!</div>
+    <div class="complete-sub">기록을 확인하세요</div>
+    <div class="complete-btns">
+      <button class="complete-btn secondary" onclick="closeComplete();showTab('dash')">📊 현황판</button>
+      <button class="complete-btn primary" onclick="closeComplete()">계속 측정</button>
+    </div>
+  </div>
+</div>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDSPb2upcZsEtATlIeKhMoFEsmc9thp28g",
-  authDomain: "sports-29dce.firebaseapp.com",
-  databaseURL: "https://sports-29dce-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "sports-29dce",
-  storageBucket: "sports-29dce.firebasestorage.app",
-  messagingSenderId: "574417258920",
-  appId: "1:574417258920:web:e3076592e49ab4ee5a359d"
-};
+<!-- Delete Modal -->
+<div id="deleteModal">
+  <div class="delete-box">
+    <div class="delete-title">⚠️ 모든 기록 삭제</div>
+    <div class="delete-sub">저장된 측정 기록이 모두 삭제됩니다.<br>이 작업은 되돌릴 수 없습니다.</div>
+    <div class="delete-btns">
+      <button class="delete-btn cancel-del" onclick="closeDeleteModal()">취소</button>
+      <button class="delete-btn confirm-del" onclick="doReset()">삭제 확인</button>
+    </div>
+  </div>
+</div>
 
-const fbApp = initializeApp(firebaseConfig);
-const auth = getAuth(fbApp);
-const db = getDatabase(fbApp);
+<!-- Toast -->
+<div id="toast"></div>
 
-/* ── 경기 데이터 (대진표 반영) ── */
-const SP = {피구:4, 티볼:3, 배구:2, 레이저런:1};
-const GRADES = {
-  1:{cls:['1반','2반','3반']},
-  2:{cls:['1반','2반','3반','4반']},
-  3:{cls:['1반','2반','3반','4반']}
-};
+<!-- Top Bar -->
+<div class="topbar">
+  <div>
+    <div class="topbar-title">학생건강체력평가</div>
+    <div class="topbar-year">2026 PAPS · 중학교</div>
+  </div>
+  <button class="admin-badge" id="adminBadge" onclick="toggleAdmin()">🛡️ 관리자</button>
+</div>
 
-const DEFAULT_GAMES = {
-  티볼: {
-    1:[
-      {id:'t1_12', orig:'4월 13일(월)', a:'1반', b:'2반', type:'예선', initSa:'9',  initSb:'10'},
-      {id:'t1_23', orig:'4월 14일(화)', a:'2반', b:'3반', type:'예선', initSa:'15', initSb:'6'},
-      {id:'t1_13', orig:'4월 15일(수)', a:'1반', b:'3반', type:'예선', initSa:'15', initSb:'9'},
-      {id:'t1_F',  orig:'4월 16일(목)', a:'1반', b:'2반', type:'결승', initSa:'',  initSb:''},
-    ],
-    2:[
-      {id:'t2_12', orig:'4월 17일(금)', a:'1반', b:'2반', type:'예선', initSa:'16', initSb:'11'},
-      {id:'t2_34', orig:'4월 20일(월)', a:'3반', b:'4반', type:'예선', initSa:'12', initSb:'10'},
-      {id:'t2_13', orig:'4월 21일(화)', a:'1반', b:'3반', type:'예선', initSa:'8',  initSb:'13'},
-      {id:'t2_24', orig:'4월 23일(목)', a:'2반', b:'4반', type:'예선', initSa:'12', initSb:'11'},
-      {id:'t2_14', orig:'4월 24일(금)', a:'1반', b:'4반', type:'예선', initSa:'11', initSb:'14'},
-      {id:'t2_23', orig:'4월 27일(월)', a:'2반', b:'3반', type:'예선', initSa:'6',  initSb:'12'},
-      {id:'t2_SF', orig:'5월 11일(월)', a:'1반', b:'2반', type:'3,4위전', initSa:'', initSb:''},
-      {id:'t2_F',  orig:'5월 12일(화)', a:'3반', b:'4반', type:'결승', initSa:'',  initSb:''},
-    ],
-    3:[
-      {id:'t3_12', orig:'5월 13일(수)', a:'1반', b:'2반', type:'예선', initSa:'10', initSb:'15'},
-      {id:'t3_34', orig:'5월 14일(목)', a:'3반', b:'4반', type:'예선', initSa:'11', initSb:'1'},
-      {id:'t3_13', orig:'5월 15일(금)', a:'1반', b:'3반', type:'예선', initSa:'15', initSb:'12'},
-      {id:'t3_24', orig:'5월 18일(월)', a:'2반', b:'4반', type:'예선', initSa:'11', initSb:'2'},
-      {id:'t3_14', orig:'5월 22일(금)', a:'1반', b:'4반', type:'예선', initSa:'11', initSb:'12'},
-      {id:'t3_23', orig:'5월 26일(화)', a:'2반', b:'3반', type:'예선', initSa:'11', initSb:'6'},
-      {id:'t3_SF', orig:'5월 28일(화)', a:'1반', b:'4반', type:'3,4위전', initSa:'', initSb:''},
-      {id:'t3_F',  orig:'5월 29일(수)', a:'2반', b:'3반', type:'결승', initSa:'',  initSb:''},
-    ]
-  },
-  배구: {
-    1:[
-      {id:'v1_12', orig:'6월 1일(월)',  a:'1반', b:'2반', type:'예선', initSa:'', initSb:''},
-      {id:'v1_23', orig:'6월 2일(화)',  a:'2반', b:'3반', type:'예선', initSa:'', initSb:''},
-      {id:'v1_13', orig:'6월 4일(목)',  a:'1반', b:'3반', type:'예선', initSa:'', initSb:''},
-      {id:'v1_F',  orig:'6월 8일(월)',  a:'예선1위', b:'예선2위', type:'결승', initSa:'', initSb:''},
-    ],
-    2:[
-      {id:'v2_12', orig:'6월 9일(화)',  a:'1반', b:'2반', type:'예선', initSa:'', initSb:''},
-      {id:'v2_34', orig:'6월 12일(금)', a:'3반', b:'4반', type:'예선', initSa:'', initSb:''},
-      {id:'v2_13', orig:'6월 15일(월)', a:'1반', b:'3반', type:'예선', initSa:'', initSb:''},
-      {id:'v2_24', orig:'6월 16일(화)', a:'2반', b:'4반', type:'예선', initSa:'', initSb:''},
-      {id:'v2_14', orig:'6월 17일(수)', a:'1반', b:'4반', type:'예선', initSa:'', initSb:''},
-      {id:'v2_23', orig:'6월 18일(목)', a:'2반', b:'3반', type:'예선', initSa:'', initSb:''},
-      {id:'v2_SF', orig:'6월 19일(금)', a:'예선3위', b:'예선4위', type:'3,4위전', initSa:'', initSb:''},
-      {id:'v2_F',  orig:'6월 22일(월)', a:'예선1위', b:'예선2위', type:'결승', initSa:'', initSb:''},
-    ],
-    3:[
-      {id:'v3_12', orig:'6월 23일(화)', a:'1반', b:'2반', type:'예선', initSa:'', initSb:''},
-      {id:'v3_34', orig:'6월 24일(수)', a:'3반', b:'4반', type:'예선', initSa:'', initSb:''},
-      {id:'v3_13', orig:'6월 25일(목)', a:'1반', b:'3반', type:'예선', initSa:'', initSb:''},
-      {id:'v3_24', orig:'6월 26일(금)', a:'2반', b:'4반', type:'예선', initSa:'', initSb:''},
-      {id:'v3_14', orig:'7월 6일(월)',  a:'1반', b:'4반', type:'예선', initSa:'', initSb:''},
-      {id:'v3_23', orig:'7월 7일(화)',  a:'2반', b:'3반', type:'예선', initSa:'', initSb:''},
-      {id:'v3_SF', orig:'7월 8일(수)',  a:'예선3위', b:'예선4위', type:'3,4위전', initSa:'', initSb:''},
-      {id:'v3_F',  orig:'7월 9일(수)',  a:'예선1위', b:'예선2위', type:'결승', initSa:'', initSb:''},
-    ]
-  },
-  피구: {
-    1:[
-      {id:'p1_12', orig:'9월 14일(월)', a:'1반', b:'2반', type:'예선', initSa:'', initSb:''},
-      {id:'p1_23', orig:'9월 15일(화)', a:'2반', b:'3반', type:'예선', initSa:'', initSb:''},
-      {id:'p1_13', orig:'9월 16일(수)', a:'1반', b:'3반', type:'예선', initSa:'', initSb:''},
-      {id:'p1_F',  orig:'9월 17일(목)', a:'예선1위', b:'예선2위', type:'결승', initSa:'', initSb:''},
-    ],
-    2:[
-      {id:'p2_12', orig:'9월 18일(금)', a:'1반', b:'2반', type:'예선', initSa:'', initSb:''},
-      {id:'p2_34', orig:'9월 21일(월)', a:'3반', b:'4반', type:'예선', initSa:'', initSb:''},
-      {id:'p2_13', orig:'9월 22일(화)', a:'1반', b:'3반', type:'예선', initSa:'', initSb:''},
-      {id:'p2_24', orig:'9월 23일(수)', a:'2반', b:'4반', type:'예선', initSa:'', initSb:''},
-      {id:'p2_14', orig:'9월 28일(월)', a:'1반', b:'4반', type:'예선', initSa:'', initSb:''},
-      {id:'p2_23', orig:'9월 29일(화)', a:'2반', b:'3반', type:'예선', initSa:'', initSb:''},
-      {id:'p2_SF', orig:'10월 6일(화)', a:'예선3위', b:'예선4위', type:'3,4위전', initSa:'', initSb:''},
-      {id:'p2_F',  orig:'10월 7일(수)', a:'예선1위', b:'예선2위', type:'결승', initSa:'', initSb:''},
-    ],
-    3:[
-      {id:'p3_12', orig:'10월 8일(목)',  a:'1반', b:'2반', type:'예선', initSa:'', initSb:''},
-      {id:'p3_34', orig:'10월 12일(월)', a:'3반', b:'4반', type:'예선', initSa:'', initSb:''},
-      {id:'p3_13', orig:'10월 13일(화)', a:'1반', b:'3반', type:'예선', initSa:'', initSb:''},
-      {id:'p3_24', orig:'10월 14일(수)', a:'2반', b:'4반', type:'예선', initSa:'', initSb:''},
-      {id:'p3_14', orig:'10월 15일(목)', a:'1반', b:'4반', type:'예선', initSa:'', initSb:''},
-      {id:'p3_23', orig:'10월 16일(금)', a:'2반', b:'3반', type:'예선', initSa:'', initSb:''},
-      {id:'p3_SF', orig:'10월 19일(월)', a:'예선3위', b:'예선4위', type:'3,4위전', initSa:'', initSb:''},
-      {id:'p3_F',  orig:'10월 20일(화)', a:'예선1위', b:'예선2위', type:'결승', initSa:'', initSb:''},
-    ]
-  },
-  레이저런: {
-    1:[],
-    2:[],
-    3:[],
-  }
-};
+<!-- Tabs -->
+<div class="tabs">
+  <div class="tab active" onclick="showTab('home')">🏠홈</div>
+  <div class="tab" onclick="showTab('measure')">📏측정</div>
+  <div class="tab" onclick="showTab('dash')">📊현황판</div>
+  <div class="tab" onclick="showTab('grade')">🏅전체등급</div>
+</div>
 
-/* ── 상태 ── */
-let isAdmin = false;
-let curSport = '티볼';
-let curGrade = 1;
-let editingDate = null;
-let fbData = {};
-let initialized = false;
+<!-- ══════════ HOME ══════════ -->
+<div class="content active" id="tab-home">
+  <div class="hero">
+    <h1>2026 SCHOOL FITNESS ASSESSMENT</h1>
+    <h2>학생건강체력평가<br>측정 시스템</h2>
+    <p>반별 학생 체력 종목을 순서대로 입력하고<br>자동으로 등급을 산출합니다.</p>
+  </div>
 
-/* ── Firebase 실시간 리스너 ── */
-onValue(ref(db, 'league2026'), (snap) => {
-  fbData = snap.val() || {};
-  if (!initialized) {
-    // 티볼 1학년 초기 결과값 Firebase에 없으면 seeding
-    seedInitialResults();
-    initialized = true;
-  }
-  setConn(true);
-  render();
-}, () => setConn(false));
+  <div class="card">
+    <div class="card-title">🏫 반 선택</div>
+    <div class="select-row">
+      <select id="homeGrade" onchange="updateHomeClass()">
+        <option value="">학년 선택</option>
+        <option value="1">1학년</option>
+        <option value="2">2학년</option>
+        <option value="3">3학년</option>
+      </select>
+      <select id="homeClass">
+        <option value="">반 선택</option>
+      </select>
+    </div>
+  </div>
 
-async function seedInitialResults() {
-  const results = fbData.results || {};
-  for (const sport of Object.values(DEFAULT_GAMES)) {
-    for (const games of Object.values(sport)) {
-      for (const g of games) {
-        if (g.initSa !== '' && !results[g.id]) {
-          const sa = g.initSa, sb = g.initSb;
-          const a = parseInt(sa), b = parseInt(sb);
-          const win = a > b ? 'A' : b > a ? 'B' : 'D';
-          await set(ref(db, `league2026/results/${g.id}`), {sa, sb, win});
-        }
-      }
-    }
-  }
+  <div class="card">
+    <div class="card-title">🏃 측정 종목 선택</div>
+    <div class="subjects-wrap" id="subjectsWrap">
+      <div class="subject-tag selected" data-subj="왕복오래달리기">왕복오래달리기</div>
+      <div class="subject-tag selected" data-subj="유연성">유연성(앉아윗몸앞으로굽히기)</div>
+      <div class="subject-tag selected" data-subj="악력">악력</div>
+      <div class="subject-tag selected" data-subj="제자리멀리뛰기">제자리멀리뛰기</div>
+    </div>
+  </div>
+
+  <button class="start-btn" id="startMeasureBtn" onclick="startMeasure()">이 반 측정 시작 →</button>
+
+  <div class="card" style="margin-top:14px;">
+    <div id="homeProgressList"></div>
+  </div>
+</div>
+
+<!-- ══════════ MEASURE ══════════ -->
+<div class="content" id="tab-measure">
+  <div class="nav-row">
+    <button class="nav-btn" id="prevBtn" onclick="prevStudent()">◀ 이전</button>
+    <span id="navInfo" style="font-size:13px;color:#666;font-weight:600;"></span>
+    <button class="nav-btn" id="nextBtn" onclick="nextStudent()">다음 ▶</button>
+  </div>
+
+  <div class="student-card">
+    <div class="student-info">
+      <div>
+        <div style="font-size:12px;color:#888;margin-bottom:2px;" id="measureClassInfo"></div>
+        <div class="student-num" id="studentNum">-</div>
+        <div class="student-name" id="studentName">-</div>
+      </div>
+      <div class="student-gender" id="studentGender">-</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 측정 기록</div>
+    <div id="measureInputs" class="input-grid"></div>
+    <div style="margin:10px 0 4px;text-align:center;" id="liveTotalBadge"></div>
+    <div style="margin-top:12px;">
+      <div class="input-label">📝 메모</div>
+      <textarea class="memo-area" id="memoInput" rows="2" placeholder="특이사항 입력..."></textarea>
+    </div>
+    <button class="save-btn" onclick="saveMeasure()">저장 후 다음 →</button>
+  </div>
+</div>
+
+<!-- ══════════ DASHBOARD ══════════ -->
+<div class="content" id="tab-dash">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num" id="dashTotal">0</div>
+      <div class="stat-label">전체</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="dashDone" style="color:var(--success);">0</div>
+      <div class="stat-label">완료</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="dashPending" style="color:var(--accent);">0</div>
+      <div class="stat-label">미완료</div>
+    </div>
+  </div>
+
+  <div id="adminDashPanel" style="display:none;">
+    <div class="admin-panel">
+      <div class="admin-panel-title">✅ 관리자 모드 활성화</div>
+      <div class="admin-actions">
+        <button class="admin-btn btn-download" onclick="downloadExcel()">📥 엑셀 다운로드</button>
+        <button class="admin-btn btn-reset" onclick="showDeleteModal()">🗑 초기화</button>
+      </div>
+      <div class="pin-change-form">
+        <div class="card-title" style="margin-bottom:8px;">🔑 관리자 PIN 변경</div>
+        <input type="password" inputmode="numeric" id="curPin" placeholder="현재 PIN">
+        <input type="password" inputmode="numeric" id="newPin" placeholder="새 PIN (4~8자리 숫자)">
+        <input type="password" inputmode="numeric" id="newPinConfirm" placeholder="새 PIN 확인">
+        <button class="pin-save-btn" onclick="changePin()">PIN 변경 저장</button>
+        <button class="admin-btn" style="width:100%;margin-top:8px;background:#f0f4f8;color:#555;" onclick="logoutAdmin()">관리자 로그아웃</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="setDashGrade('all',this)">전체 학년</button>
+    <button class="filter-tab" onclick="setDashGrade('1',this)">1학년</button>
+    <button class="filter-tab" onclick="setDashGrade('2',this)">2학년</button>
+    <button class="filter-tab" onclick="setDashGrade('3',this)">3학년</button>
+  </div>
+  <div class="class-filter" id="dashClassFilter"></div>
+
+  <div class="table-wrap">
+    <table id="dashTable">
+      <thead>
+        <tr>
+          <th>학반번</th><th>이름</th><th>성</th>
+          <th>왕복달리기</th><th>악력(kg)</th><th>멀리뛰기</th><th>유연성</th>
+          <th>키</th><th>몸무게</th><th>BMI</th><th>상태</th>
+        </tr>
+      </thead>
+      <tbody id="dashBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════ GRADE ══════════ -->
+<div class="content" id="tab-grade">
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="setGradeFilter('all',this)">전체 학년</button>
+    <button class="filter-tab" onclick="setGradeFilter('1',this)">1학년</button>
+    <button class="filter-tab" onclick="setGradeFilter('2',this)">2학년</button>
+    <button class="filter-tab" onclick="setGradeFilter('3',this)">3학년</button>
+  </div>
+  <div class="class-filter" id="gradeClassFilter"></div>
+
+  <div class="grade-counts">
+    <div class="grade-count-card gc1"><div class="grade-count-num" id="gc1">0</div><div class="grade-count-label">1등급</div></div>
+    <div class="grade-count-card gc2"><div class="grade-count-num" id="gc2">0</div><div class="grade-count-label">2등급</div></div>
+    <div class="grade-count-card gc3"><div class="grade-count-num" id="gc3">0</div><div class="grade-count-label">3등급</div></div>
+    <div class="grade-count-card gc4"><div class="grade-count-num" id="gc4">0</div><div class="grade-count-label">4등급</div></div>
+    <div class="grade-count-card gc5"><div class="grade-count-num" id="gc5">0</div><div class="grade-count-label">5등급</div></div>
+  </div>
+
+  <div class="table-wrap">
+    <table id="gradeTable">
+      <thead>
+        <tr>
+          <th>학반번</th><th>이름</th><th>성</th>
+          <th>왕복달리기</th><th>악력</th><th>멀리뛰기</th><th>유연성</th>
+          <th>총점</th><th>전체등급</th>
+        </tr>
+      </thead>
+      <tbody id="gradeBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════
+   PAPS 평가기준 룩업 테이블 (엑셀 데이터 기반)
+══════════════════════════════════════════════ */
+const LOOKUP = {"남":{"1":{"왕복오래달리기":[{"s":20,"a":73.0,"b":150.0},{"s":19,"a":71.0,"b":72.0},{"s":18,"a":69.0,"b":70.0},{"s":17,"a":66.0,"b":68.0},{"s":16,"a":64.0,"b":65.0},{"s":15,"a":61.0,"b":63.0},{"s":14,"a":57.0,"b":60.0},{"s":13,"a":54.0,"b":56.0},{"s":12,"a":50.0,"b":53.0},{"s":11,"a":47.0,"b":49.0},{"s":10,"a":43.0,"b":46.0},{"s":9,"a":40.0,"b":42.0},{"s":8,"a":36.0,"b":39.0},{"s":7,"a":32.0,"b":35.0},{"s":6,"a":28.0,"b":31.0},{"s":5,"a":24.0,"b":27.0},{"s":4,"a":20.0,"b":23.0},{"s":3,"a":19.0,"b":19.0},{"s":2,"a":17.0,"b":18.0},{"s":1,"a":16.0,"b":16.0},{"s":0,"a":0.0,"b":15.0}],"유연성":[{"s":20,"a":25.0,"b":50.0},{"s":19,"a":21.3,"b":24.9},{"s":18,"a":17.5,"b":21.2},{"s":17,"a":13.8,"b":17.4},{"s":16,"a":10.0,"b":13.7},{"s":15,"a":9.0,"b":9.9},{"s":14,"a":8.0,"b":8.9},{"s":13,"a":7.0,"b":7.9},{"s":12,"a":6.0,"b":6.9},{"s":11,"a":5.0,"b":5.9},{"s":10,"a":4.0,"b":4.9},{"s":9,"a":3.0,"b":3.9},{"s":8,"a":2.0,"b":2.9},{"s":7,"a":0.5,"b":1.9},{"s":6,"a":-1.0,"b":0.4},{"s":5,"a":-2.5,"b":-1.1},{"s":4,"a":-4.0,"b":-2.6},{"s":3,"a":-4.3,"b":-4.1},{"s":2,"a":-4.7,"b":-4.4},{"s":1,"a":-5.0,"b":-4.8},{"s":0,"a":-40.0,"b":-5.1}],"악력":[{"s":20,"a":46.0,"b":200.0},{"s":19,"a":45.0,"b":45.9},{"s":18,"a":44.0,"b":44.9},{"s":17,"a":43.0,"b":43.9},{"s":16,"a":42.0,"b":42.9},{"s":15,"a":39.0,"b":41.9},{"s":14,"a":36.0,"b":38.9},{"s":13,"a":33.0,"b":35.9},{"s":12,"a":30.0,"b":32.9},{"s":11,"a":28.1,"b":29.9},{"s":10,"a":26.3,"b":28.0},{"s":9,"a":24.4,"b":26.2},{"s":8,"a":22.5,"b":24.3},{"s":7,"a":21.0,"b":22.4},{"s":6,"a":19.5,"b":20.9},{"s":5,"a":18.0,"b":19.4},{"s":4,"a":16.5,"b":17.9},{"s":3,"a":15.8,"b":16.4},{"s":2,"a":15.2,"b":15.7},{"s":1,"a":14.5,"b":15.1},{"s":0,"a":0.0,"b":14.4}],"제자리멀리뛰기":[{"s":20,"a":219.7,"b":300.0},{"s":19,"a":217.6,"b":219.6},{"s":18,"a":215.4,"b":217.5},{"s":17,"a":213.3,"b":215.3},{"s":16,"a":211.1,"b":213.2},{"s":15,"a":202.6,"b":211.0},{"s":14,"a":194.1,"b":202.5},{"s":13,"a":185.6,"b":194.0},{"s":12,"a":177.1,"b":185.5},{"s":11,"a":172.6,"b":177.0},{"s":10,"a":168.1,"b":172.5},{"s":9,"a":163.6,"b":168.0},{"s":8,"a":159.1,"b":163.5},{"s":7,"a":152.1,"b":159.0},{"s":6,"a":145.1,"b":152.0},{"s":5,"a":138.1,"b":145.0},{"s":4,"a":131.1,"b":138.0},{"s":3,"a":128.4,"b":131.0},{"s":2,"a":125.7,"b":128.3},{"s":1,"a":123.0,"b":125.6},{"s":0,"a":0.0,"b":122.9}]},"2":{"왕복오래달리기":[{"s":20,"a":75.0,"b":150.0},{"s":19,"a":73.0,"b":74.0},{"s":18,"a":71.0,"b":72.0},{"s":17,"a":68.0,"b":70.0},{"s":16,"a":66.0,"b":67.0},{"s":15,"a":63.0,"b":65.0},{"s":14,"a":59.0,"b":62.0},{"s":13,"a":56.0,"b":58.0},{"s":12,"a":52.0,"b":55.0},{"s":11,"a":49.0,"b":51.0},{"s":10,"a":45.0,"b":48.0},{"s":9,"a":42.0,"b":44.0},{"s":8,"a":38.0,"b":41.0},{"s":7,"a":34.0,"b":37.0},{"s":6,"a":30.0,"b":33.0},{"s":5,"a":26.0,"b":29.0},{"s":4,"a":22.0,"b":25.0},{"s":3,"a":20.0,"b":21.0},{"s":2,"a":18.0,"b":19.0},{"s":1,"a":16.0,"b":17.0},{"s":0,"a":0.0,"b":15.0}],"유연성":[{"s":20,"a":25.0,"b":50.0},{"s":19,"a":21.3,"b":24.9},{"s":18,"a":17.5,"b":21.2},{"s":17,"a":13.8,"b":17.4},{"s":16,"a":10.0,"b":13.7},{"s":15,"a":9.3,"b":9.9},{"s":14,"a":8.5,"b":9.2},{"s":13,"a":7.8,"b":8.4},{"s":12,"a":7.0,"b":7.7},{"s":11,"a":5.8,"b":6.9},{"s":10,"a":4.5,"b":5.7},{"s":9,"a":3.3,"b":4.4},{"s":8,"a":2.0,"b":3.2},{"s":7,"a":0.5,"b":1.9},{"s":6,"a":-1.0,"b":0.4},{"s":5,"a":-2.5,"b":-1.1},{"s":4,"a":-4.0,"b":-2.6},{"s":3,"a":-4.3,"b":-4.1},{"s":2,"a":-4.7,"b":-4.4},{"s":1,"a":-5.0,"b":-4.8},{"s":0,"a":-40.0,"b":-5.1}],"악력":[{"s":20,"a":47.0,"b":200.0},{"s":19,"a":46.4,"b":46.9},{"s":18,"a":45.8,"b":46.3},{"s":17,"a":45.1,"b":45.7},{"s":16,"a":44.5,"b":45.0},{"s":15,"a":42.6,"b":44.4},{"s":14,"a":40.8,"b":42.5},{"s":13,"a":38.9,"b":40.7},{"s":12,"a":37.0,"b":38.8},{"s":11,"a":34.9,"b":36.9},{"s":10,"a":32.8,"b":34.8},{"s":9,"a":30.6,"b":32.7},{"s":8,"a":28.5,"b":30.5},{"s":7,"a":26.9,"b":28.4},{"s":6,"a":25.3,"b":26.8},{"s":5,"a":23.6,"b":25.2},{"s":4,"a":22.0,"b":23.5},{"s":3,"a":21.1,"b":21.9},{"s":2,"a":20.1,"b":21.0},{"s":1,"a":19.2,"b":20.0},{"s":0,"a":0.0,"b":19.1}],"제자리멀리뛰기":[{"s":20,"a":229.3,"b":300.0},{"s":19,"a":226.5,"b":229.2},{"s":18,"a":223.7,"b":226.4},{"s":17,"a":220.9,"b":223.6},{"s":16,"a":218.1,"b":220.8},{"s":15,"a":210.4,"b":218.0},{"s":14,"a":202.6,"b":210.3},{"s":13,"a":194.9,"b":202.5},{"s":12,"a":187.1,"b":194.8},{"s":11,"a":182.6,"b":187.0},{"s":10,"a":178.1,"b":182.5},{"s":9,"a":173.6,"b":178.0},{"s":8,"a":169.1,"b":173.5},{"s":7,"a":160.9,"b":169.0},{"s":6,"a":152.6,"b":160.8},{"s":5,"a":144.4,"b":152.5},{"s":4,"a":136.1,"b":144.3},{"s":3,"a":134.1,"b":136.0},{"s":2,"a":132.0,"b":134.0},{"s":1,"a":130.0,"b":131.9},{"s":0,"a":0.0,"b":129.9}]},"3":{"왕복오래달리기":[{"s":20,"a":79.0,"b":150.0},{"s":19,"a":76.0,"b":78.0},{"s":18,"a":74.0,"b":75.0},{"s":17,"a":71.0,"b":73.0},{"s":16,"a":68.0,"b":70.0},{"s":15,"a":65.0,"b":67.0},{"s":14,"a":61.0,"b":64.0},{"s":13,"a":58.0,"b":60.0},{"s":12,"a":54.0,"b":57.0},{"s":11,"a":51.0,"b":53.0},{"s":10,"a":47.0,"b":50.0},{"s":9,"a":44.0,"b":46.0},{"s":8,"a":40.0,"b":43.0},{"s":7,"a":36.0,"b":39.0},{"s":6,"a":32.0,"b":35.0},{"s":5,"a":28.0,"b":31.0},{"s":4,"a":24.0,"b":27.0},{"s":3,"a":22.0,"b":23.0},{"s":2,"a":19.0,"b":21.0},{"s":1,"a":17.0,"b":18.0},{"s":0,"a":0.0,"b":16.0}],"유연성":[{"s":20,"a":25.0,"b":50.0},{"s":19,"a":21.3,"b":24.9},{"s":18,"a":17.5,"b":21.2},{"s":17,"a":13.8,"b":17.4},{"s":16,"a":10.0,"b":13.7},{"s":15,"a":9.3,"b":9.9},{"s":14,"a":8.5,"b":9.2},{"s":13,"a":7.8,"b":8.4},{"s":12,"a":7.0,"b":7.7},{"s":11,"a":5.9,"b":6.9},{"s":10,"a":4.8,"b":5.8},{"s":9,"a":3.7,"b":4.7},{"s":8,"a":2.6,"b":3.6},{"s":7,"a":1.2,"b":2.5},{"s":6,"a":-0.2,"b":1.1},{"s":5,"a":-1.6,"b":-0.3},{"s":4,"a":-3.0,"b":-1.7},{"s":3,"a":-3.7,"b":-3.1},{"s":2,"a":-4.3,"b":-3.8},{"s":1,"a":-5.0,"b":-4.4},{"s":0,"a":-40.0,"b":-5.1}],"악력":[{"s":20,"a":50.0,"b":200.0},{"s":19,"a":49.6,"b":49.9},{"s":18,"a":49.3,"b":49.5},{"s":17,"a":48.9,"b":49.2},{"s":16,"a":48.5,"b":48.8},{"s":15,"a":46.5,"b":48.4},{"s":14,"a":44.5,"b":46.4},{"s":13,"a":42.5,"b":44.4},{"s":12,"a":40.5,"b":42.4},{"s":11,"a":38.6,"b":40.4},{"s":10,"a":36.8,"b":38.5},{"s":9,"a":34.9,"b":36.7},{"s":8,"a":33.0,"b":34.8},{"s":7,"a":31.0,"b":32.9},{"s":6,"a":29.0,"b":30.9},{"s":5,"a":27.0,"b":28.9},{"s":4,"a":25.0,"b":26.9},{"s":3,"a":23.1,"b":24.9},{"s":2,"a":21.1,"b":23.0},{"s":1,"a":19.2,"b":21.0},{"s":0,"a":0.0,"b":19.1}],"제자리멀리뛰기":[{"s":20,"a":244.0,"b":300.0},{"s":19,"a":242.5,"b":243.9},{"s":18,"a":241.1,"b":242.4},{"s":17,"a":239.6,"b":241.0},{"s":16,"a":238.1,"b":239.5},{"s":15,"a":228.9,"b":238.0},{"s":14,"a":219.6,"b":228.8},{"s":13,"a":210.4,"b":219.5},{"s":12,"a":201.1,"b":210.3},{"s":11,"a":195.9,"b":201.0},{"s":10,"a":190.6,"b":195.8},{"s":9,"a":185.4,"b":190.5},{"s":8,"a":180.1,"b":185.3},{"s":7,"a":171.4,"b":180.0},{"s":6,"a":162.6,"b":171.3},{"s":5,"a":153.9,"b":162.5},{"s":4,"a":145.1,"b":153.8},{"s":3,"a":143.9,"b":145.0},{"s":2,"a":142.7,"b":143.8},{"s":1,"a":141.5,"b":142.6},{"s":0,"a":0.0,"b":141.4}]}},"여":{"1":{"왕복오래달리기":[{"s":20,"a":70.0,"b":150.0},{"s":19,"a":61.0,"b":69.0},{"s":18,"a":53.0,"b":60.0},{"s":17,"a":44.0,"b":52.0},{"s":16,"a":35.0,"b":43.0},{"s":15,"a":33.0,"b":34.0},{"s":14,"a":30.0,"b":32.0},{"s":13,"a":28.0,"b":29.0},{"s":12,"a":25.0,"b":27.0},{"s":11,"a":24.0,"b":24.0},{"s":10,"a":22.0,"b":23.0},{"s":9,"a":21.0,"b":21.0},{"s":8,"a":19.0,"b":20.0},{"s":7,"a":18.0,"b":18.0},{"s":6,"a":17.0,"b":17.0},{"s":5,"a":15.0,"b":16.0},{"s":4,"a":14.0,"b":14.0},{"s":3,"a":13.0,"b":13.0},{"s":2,"a":12.0,"b":12.0},{"s":1,"a":11.0,"b":11.0},{"s":0,"a":0.0,"b":10.0}],"유연성":[{"s":20,"a":28.0,"b":50.0},{"s":19,"a":24.8,"b":27.9},{"s":18,"a":21.5,"b":24.7},{"s":17,"a":18.3,"b":21.4},{"s":16,"a":15.0,"b":18.2},{"s":15,"a":14.0,"b":14.9},{"s":14,"a":13.0,"b":13.9},{"s":13,"a":12.0,"b":12.9},{"s":12,"a":11.0,"b":11.9},{"s":11,"a":10.3,"b":10.9},{"s":10,"a":9.5,"b":10.2},{"s":9,"a":8.8,"b":9.4},{"s":8,"a":8.0,"b":8.7},{"s":7,"a":6.5,"b":7.9},{"s":6,"a":5.0,"b":6.4},{"s":5,"a":3.5,"b":4.9},{"s":4,"a":2.0,"b":3.4},{"s":3,"a":1.3,"b":1.9},{"s":2,"a":0.7,"b":1.2},{"s":1,"a":0.0,"b":0.6},{"s":0,"a":-40.0,"b":-0.1}],"악력":[{"s":20,"a":38.0,"b":200.0},{"s":19,"a":37.5,"b":37.9},{"s":18,"a":37.0,"b":37.4},{"s":17,"a":36.5,"b":36.9},{"s":16,"a":36.0,"b":36.4},{"s":15,"a":32.8,"b":35.9},{"s":14,"a":29.5,"b":32.7},{"s":13,"a":26.3,"b":29.4},{"s":12,"a":23.0,"b":26.2},{"s":11,"a":22.0,"b":22.9},{"s":10,"a":21.0,"b":21.9},{"s":9,"a":20.0,"b":20.9},{"s":8,"a":19.0,"b":19.9},{"s":7,"a":17.8,"b":18.9},{"s":6,"a":16.5,"b":17.7},{"s":5,"a":15.3,"b":16.4},{"s":4,"a":14.0,"b":15.2},{"s":3,"a":13.3,"b":13.9},{"s":2,"a":12.7,"b":13.2},{"s":1,"a":12.0,"b":12.6},{"s":0,"a":0.0,"b":11.9}],"제자리멀리뛰기":[{"s":20,"a":180.5,"b":300.0},{"s":19,"a":179.2,"b":180.4},{"s":18,"a":177.8,"b":179.1},{"s":17,"a":176.5,"b":177.7},{"s":16,"a":175.1,"b":176.4},{"s":15,"a":167.4,"b":175.0},{"s":14,"a":159.6,"b":167.3},{"s":13,"a":151.9,"b":159.5},{"s":12,"a":144.1,"b":151.8},{"s":11,"a":139.9,"b":144.0},{"s":10,"a":135.6,"b":139.8},{"s":9,"a":131.4,"b":135.5},{"s":8,"a":127.1,"b":131.3},{"s":7,"a":120.4,"b":127.0},{"s":6,"a":113.6,"b":120.3},{"s":5,"a":106.9,"b":113.5},{"s":4,"a":100.1,"b":106.8},{"s":3,"a":96.7,"b":100.0},{"s":2,"a":93.4,"b":96.6},{"s":1,"a":90.0,"b":93.3},{"s":0,"a":0.0,"b":89.9}]},"2":{"왕복오래달리기":[{"s":20,"a":75.0,"b":150.0},{"s":19,"a":66.0,"b":74.0},{"s":18,"a":58.0,"b":65.0},{"s":17,"a":49.0,"b":57.0},{"s":16,"a":40.0,"b":48.0},{"s":15,"a":37.0,"b":39.0},{"s":14,"a":35.0,"b":36.0},{"s":13,"a":32.0,"b":34.0},{"s":12,"a":29.0,"b":31.0},{"s":11,"a":27.0,"b":28.0},{"s":10,"a":25.0,"b":26.0},{"s":9,"a":23.0,"b":24.0},{"s":8,"a":21.0,"b":22.0},{"s":7,"a":20.0,"b":20.0},{"s":6,"a":18.0,"b":19.0},{"s":5,"a":17.0,"b":17.0},{"s":4,"a":15.0,"b":16.0},{"s":3,"a":13.0,"b":14.0},{"s":2,"a":12.0,"b":12.0},{"s":1,"a":11.0,"b":11.0},{"s":0,"a":0.0,"b":10.0}],"유연성":[{"s":20,"a":28.0,"b":50.0},{"s":19,"a":24.8,"b":27.9},{"s":18,"a":21.5,"b":24.7},{"s":17,"a":18.3,"b":21.4},{"s":16,"a":15.0,"b":18.2},{"s":15,"a":14.0,"b":14.9},{"s":14,"a":13.0,"b":13.9},{"s":13,"a":12.0,"b":12.9},{"s":12,"a":11.0,"b":11.9},{"s":11,"a":10.3,"b":10.9},{"s":10,"a":9.5,"b":10.2},{"s":9,"a":8.8,"b":9.4},{"s":8,"a":8.0,"b":8.7},{"s":7,"a":6.5,"b":7.9},{"s":6,"a":5.0,"b":6.4},{"s":5,"a":3.5,"b":4.9},{"s":4,"a":2.0,"b":3.4},{"s":3,"a":1.3,"b":1.9},{"s":2,"a":0.7,"b":1.2},{"s":1,"a":0.0,"b":0.6},{"s":0,"a":-40.0,"b":-0.1}],"악력":[{"s":20,"a":38.0,"b":200.0},{"s":19,"a":37.5,"b":37.9},{"s":18,"a":37.0,"b":37.4},{"s":17,"a":36.5,"b":36.9},{"s":16,"a":36.0,"b":36.4},{"s":15,"a":33.4,"b":35.9},{"s":14,"a":30.8,"b":33.3},{"s":13,"a":28.1,"b":30.7},{"s":12,"a":25.5,"b":28.0},{"s":11,"a":24.0,"b":25.4},{"s":10,"a":22.5,"b":23.9},{"s":9,"a":21.0,"b":22.4},{"s":8,"a":19.5,"b":20.9},{"s":7,"a":18.1,"b":19.4},{"s":6,"a":16.8,"b":18.0},{"s":5,"a":15.4,"b":16.7},{"s":4,"a":14.0,"b":15.3},{"s":3,"a":13.7,"b":13.9},{"s":2,"a":13.4,"b":13.6},{"s":1,"a":13.1,"b":13.3},{"s":0,"a":0.0,"b":13.0}],"제자리멀리뛰기":[{"s":20,"a":198.0,"b":300.0},{"s":19,"a":194.3,"b":197.9},{"s":18,"a":190.6,"b":194.2},{"s":17,"a":186.8,"b":190.5},{"s":16,"a":183.1,"b":186.7},{"s":15,"a":173.6,"b":183.0},{"s":14,"a":164.1,"b":173.5},{"s":13,"a":154.6,"b":164.0},{"s":12,"a":145.1,"b":154.5},{"s":11,"a":140.6,"b":145.0},{"s":10,"a":136.1,"b":140.5},{"s":9,"a":131.6,"b":136.0},{"s":8,"a":127.1,"b":131.5},{"s":7,"a":120.4,"b":127.0},{"s":6,"a":113.6,"b":120.3},{"s":5,"a":106.9,"b":113.5},{"s":4,"a":100.1,"b":106.8},{"s":3,"a":98.1,"b":100.0},{"s":2,"a":96.0,"b":98.0},{"s":1,"a":94.0,"b":95.9},{"s":0,"a":0.0,"b":93.9}]},"3":{"왕복오래달리기":[{"s":20,"a":80.0,"b":150.0},{"s":19,"a":71.0,"b":79.0},{"s":18,"a":63.0,"b":70.0},{"s":17,"a":54.0,"b":62.0},{"s":16,"a":45.0,"b":53.0},{"s":15,"a":42.0,"b":44.0},{"s":14,"a":39.0,"b":41.0},{"s":13,"a":36.0,"b":38.0},{"s":12,"a":33.0,"b":35.0},{"s":11,"a":31.0,"b":32.0},{"s":10,"a":28.0,"b":30.0},{"s":9,"a":26.0,"b":27.0},{"s":8,"a":23.0,"b":25.0},{"s":7,"a":21.0,"b":22.0},{"s":6,"a":20.0,"b":20.0},{"s":5,"a":18.0,"b":19.0},{"s":4,"a":16.0,"b":17.0},{"s":3,"a":15.0,"b":15.0},{"s":2,"a":14.0,"b":14.0},{"s":1,"a":13.0,"b":13.0},{"s":0,"a":0.0,"b":12.0}],"유연성":[{"s":20,"a":28.0,"b":50.0},{"s":19,"a":25.0,"b":27.9},{"s":18,"a":22.0,"b":24.9},{"s":17,"a":19.0,"b":21.9},{"s":16,"a":16.0,"b":18.9},{"s":15,"a":14.8,"b":15.9},{"s":14,"a":13.5,"b":14.7},{"s":13,"a":12.3,"b":13.4},{"s":12,"a":11.0,"b":12.2},{"s":11,"a":10.3,"b":10.9},{"s":10,"a":9.5,"b":10.2},{"s":9,"a":8.8,"b":9.4},{"s":8,"a":8.0,"b":8.7},{"s":7,"a":6.5,"b":7.9},{"s":6,"a":5.0,"b":6.4},{"s":5,"a":3.5,"b":4.9},{"s":4,"a":2.0,"b":3.4},{"s":3,"a":1.3,"b":1.9},{"s":2,"a":0.7,"b":1.2},{"s":1,"a":0.0,"b":0.6},{"s":0,"a":-40.0,"b":-0.1}],"악력":[{"s":20,"a":38.0,"b":200.0},{"s":19,"a":37.5,"b":37.9},{"s":18,"a":37.0,"b":37.4},{"s":17,"a":36.5,"b":36.9},{"s":16,"a":36.0,"b":36.4},{"s":15,"a":33.9,"b":35.9},{"s":14,"a":31.8,"b":33.8},{"s":13,"a":29.6,"b":31.7},{"s":12,"a":27.5,"b":29.5},{"s":11,"a":25.5,"b":27.4},{"s":10,"a":23.5,"b":25.4},{"s":9,"a":21.5,"b":23.4},{"s":8,"a":19.5,"b":21.4},{"s":7,"a":18.6,"b":19.4},{"s":6,"a":17.8,"b":18.5},{"s":5,"a":16.9,"b":17.7},{"s":4,"a":16.0,"b":16.8},{"s":3,"a":15.7,"b":15.9},{"s":2,"a":15.3,"b":15.6},{"s":1,"a":15.0,"b":15.2},{"s":0,"a":0.0,"b":14.9}],"제자리멀리뛰기":[{"s":20,"a":198.0,"b":300.0},{"s":19,"a":194.3,"b":197.9},{"s":18,"a":190.6,"b":194.2},{"s":17,"a":186.8,"b":190.5},{"s":16,"a":183.1,"b":186.7},{"s":15,"a":173.6,"b":183.0},{"s":14,"a":164.1,"b":173.5},{"s":13,"a":154.6,"b":164.0},{"s":12,"a":145.1,"b":154.5},{"s":11,"a":140.6,"b":145.0},{"s":10,"a":136.1,"b":140.5},{"s":9,"a":131.6,"b":136.0},{"s":8,"a":127.1,"b":131.5},{"s":7,"a":120.4,"b":127.0},{"s":6,"a":113.6,"b":120.3},{"s":5,"a":106.9,"b":113.5},{"s":4,"a":100.1,"b":106.8},{"s":3,"a":98.4,"b":100.0},{"s":2,"a":96.7,"b":98.3},{"s":1,"a":95.0,"b":96.6},{"s":0,"a":0.0,"b":94.9}]}}};
+
+/* ══════════════════════════════════════════
+   점수 → 등급 변환 (score 0~20 → grade 1~5)
+   점수 구간: 16~20=1등급, 12~15=2등급, 8~11=3등급, 4~7=4등급, 0~3=5등급
+══════════════════════════════════════════ */
+function scoreToGrade(score) {
+  if (score >= 16) return 1;
+  if (score >= 12) return 2;
+  if (score >= 8)  return 3;
+  if (score >= 4)  return 4;
+  return 5;
 }
 
-function setConn(ok) {
-  document.getElementById('connDot').className = 'conn-dot ' + (ok ? 'ok' : 'err');
-  document.getElementById('connText').textContent = ok
-    ? 'Firebase 연결됨 — 실시간 동기화 중'
-    : 'Firebase 연결 오류';
+/* 측정값 → 점수(0~20) 변환 */
+function getScore(gender, grade, subject, value) {
+  if (value === null || value === '' || isNaN(value)) return null;
+  const g = gender === '남' ? '남' : '여';
+  const gr = String(grade);
+  const tbl = LOOKUP[g] && LOOKUP[g][gr] && LOOKUP[g][gr][subject];
+  if (!tbl) return null;
+  const v = parseFloat(value);
+  for (const row of tbl) {
+    if (v >= row.a && v <= row.b) return row.s;
+  }
+  // 범위 밖 처리: 최솟값보다 작으면 0, 최댓값보다 크면 20
+  return v > tbl[0].b ? 20 : 0;
 }
 
-/* ── 인증 ── */
-onAuthStateChanged(auth, (user) => {
-  isAdmin = !!user;
-  updateModeUI();
-  render();
+/* 악력: 우/좌 각 2차시 중 최대값 → 더 큰 쪽 점수 */
+function getGripScore(gender, grade, r1u, r1l, r2u, r2l) {
+  const right = Math.max(parseFloat(r1u)||0, parseFloat(r2u)||0);
+  const left  = Math.max(parseFloat(r1l)||0, parseFloat(r2l)||0);
+  const best  = Math.max(right, left);
+  if (best <= 0) return null;
+  return getScore(gender, grade, '악력', best);
+}
+
+/* 유연성: 2차시 중 최대값 */
+function getFlexScore(gender, grade, v1, v2) {
+  const best = Math.max(parseFloat(v1) || -999, parseFloat(v2) || -999);
+  if (best <= -999) return null;
+  return getScore(gender, grade, '유연성', best);
+}
+
+/* 제자리멀리뛰기: 2차시 중 최대값 */
+function getJumpScore(gender, grade, v1, v2) {
+  const best = Math.max(parseFloat(v1)||0, parseFloat(v2)||0);
+  if (best <= 0) return null;
+  return getScore(gender, grade, '제자리멀리뛰기', best);
+}
+
+/* 총점 + 전체등급 계산 */
+function calcTotal(rec) {
+  const g = rec.gender; const gr = String(rec.grade);
+  const scores = [];
+
+  if (rec.왕복오래달리기 !== undefined && rec.왕복오래달리기 !== '') {
+    const s = getScore(g, gr, '왕복오래달리기', rec.왕복오래달리기);
+    if (s !== null) scores.push(s);
+  }
+  if (rec.유연성1 !== undefined || rec.유연성2 !== undefined) {
+    const s = getFlexScore(g, gr, rec.유연성1, rec.유연성2);
+    if (s !== null) scores.push(s);
+  }
+  if (rec.악력1u !== undefined || rec.악력1l !== undefined) {
+    const s = getGripScore(g, gr, rec.악력1u, rec.악력1l, rec.악력2u, rec.악력2l);
+    if (s !== null) scores.push(s);
+  }
+  if (rec.멀리뛰기1 !== undefined || rec.멀리뛰기2 !== undefined) {
+    const s = getJumpScore(g, gr, rec.멀리뛰기1, rec.멀리뛰기2);
+    if (s !== null) scores.push(s);
+  }
+
+  if (scores.length === 0) return { total: null, grade: null };
+  // 총점: 각 종목 점수 합 → 100점 만점으로 비례환산 (종목당 최대 20점, 4종목 최대 80점 → × 100/80)
+  const maxPossible = scores.length * 20;
+  const sum = scores.reduce((a,b) => a+b, 0);
+  const total100 = Math.round(sum / maxPossible * 100);
+  const grade = scoreToGrade(Math.round(sum / scores.length)); // 평균 점수로 전체등급
+  return { total: total100, grade };
+}
+
+/* ══ STATE ══ */
+let students = JSON.parse(localStorage.getItem('paps_students') || '[]');
+let records  = JSON.parse(localStorage.getItem('paps_records')  || '{}');
+let adminOn  = false;
+let PIN      = localStorage.getItem('paps_pin') || '1234';
+
+let curGrade = '', curClass = '', curIdx = 0;
+let selectedSubjects = ['왕복오래달리기','유연성','악력','제자리멀리뛰기'];
+let dashGradeFilter  = 'all', dashClassFilter_ = 'all';
+let gradeGradeFilter = 'all', gradeClassFilter_ = 'all';
+
+/* ── Subject tag toggle ── */
+document.querySelectorAll('.subject-tag').forEach(t => {
+  t.addEventListener('click', () => {
+    t.classList.toggle('selected');
+    selectedSubjects = [...document.querySelectorAll('.subject-tag.selected')].map(x => x.dataset.subj);
+  });
 });
 
-function updateModeUI() {
-  const badge = document.getElementById('modeBadge');
-  const desc = document.getElementById('modeDesc');
-  if (isAdmin) {
-    badge.className = 'mode-badge admin';
-    badge.textContent = '🛠️ 관리자 모드';
-    desc.textContent = '경기 일정·결과를 수정할 수 있습니다.';
-    document.getElementById('loginBtn').style.display = 'none';
-    document.getElementById('logoutBtn').style.display = '';
-  } else {
-    badge.className = 'mode-badge viewer';
-    badge.textContent = '👀 참여자 모드';
-    desc.textContent = '경기 일정과 결과를 조회하고 있습니다.';
-    document.getElementById('loginBtn').style.display = '';
-    document.getElementById('logoutBtn').style.display = 'none';
-  }
+/* ══ PIN ══ */
+let pinBuf = '';
+function openPin()   { pinBuf=''; document.getElementById('pinDisplay').textContent='　'; document.getElementById('pinModal').classList.add('show'); }
+function closePin()  { document.getElementById('pinModal').classList.remove('show'); }
+function pinInput(d) { if(pinBuf.length<8){ pinBuf+=d; document.getElementById('pinDisplay').textContent='●'.repeat(pinBuf.length); } }
+function pinDel()    { pinBuf=pinBuf.slice(0,-1); document.getElementById('pinDisplay').textContent=pinBuf.length?'●'.repeat(pinBuf.length):'　'; }
+function pinConfirm(){ if(pinBuf===PIN){ adminOn=true; closePin(); document.getElementById('adminBadge').classList.add('active'); document.getElementById('adminDashPanel').style.display='block'; showToast('관리자 모드 활성화'); } else { showToast('PIN이 틀렸습니다'); pinBuf=''; document.getElementById('pinDisplay').textContent='　'; } }
+function toggleAdmin(){ if(adminOn) logoutAdmin(); else openPin(); }
+function logoutAdmin(){ adminOn=false; document.getElementById('adminBadge').classList.remove('active'); document.getElementById('adminDashPanel').style.display='none'; showToast('로그아웃'); }
+function changePin(){
+  const c=document.getElementById('curPin').value, n=document.getElementById('newPin').value, nc=document.getElementById('newPinConfirm').value;
+  if(c!==PIN){showToast('현재 PIN이 틀렸습니다');return;}
+  if(!/^\d{4,8}$/.test(n)){showToast('새 PIN은 4~8자리 숫자');return;}
+  if(n!==nc){showToast('새 PIN 불일치');return;}
+  PIN=n; localStorage.setItem('paps_pin',PIN);
+  document.getElementById('curPin').value=document.getElementById('newPin').value=document.getElementById('newPinConfirm').value='';
+  showToast('PIN 변경 완료');
 }
 
-window.openLoginModal = () => {
-  document.getElementById('loginModal').style.display = 'flex';
-  document.getElementById('loginErr').style.display = 'none';
-  document.getElementById('loginEmail').value = '';
-  document.getElementById('loginPw').value = '';
-  setTimeout(() => document.getElementById('loginEmail').focus(), 100);
-};
-window.closeLoginModal = () => { document.getElementById('loginModal').style.display = 'none'; };
-window.doLogin = async () => {
-  const email = document.getElementById('loginEmail').value.trim();
-  const pw = document.getElementById('loginPw').value;
-  try {
-    await signInWithEmailAndPassword(auth, email, pw);
-    closeLoginModal();
-  } catch { document.getElementById('loginErr').style.display = 'block'; }
-};
-window.doLogout = async () => { await signOut(auth); };
-
-/* ── 데이터 헬퍼 ── */
-function getD(id) { return (fbData.dates || {})[id] || null; }
-function getR(id) { return (fbData.results || {})[id] || {sa:'', sb:'', win:''}; }
-async function setD(id, val, isRain) { await set(ref(db, `league2026/dates/${id}`), {val, isRain:!!isRain}); editingDate = null; }
-async function clearD(id) { await set(ref(db, `league2026/dates/${id}`), null); editingDate = null; }
-async function setR(id, sa, sb) {
-  const a = parseInt(sa), b = parseInt(sb);
-  let win = '';
-  if (!isNaN(a) && !isNaN(b)) win = a > b ? 'A' : b > a ? 'B' : 'D';
-  await set(ref(db, `league2026/results/${id}`), {sa, sb, win});
+/* ══ TABS ══ */
+function showTab(t) {
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active', ['home','measure','dash','grade'][i]===t));
+  document.querySelectorAll('.content').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  if(t==='home')    renderHome();
+  if(t==='dash')    renderDash();
+  if(t==='grade')   renderGrade();
+  if(t==='measure') renderMeasure();
 }
 
-/* ── 순위 계산 ── */
-function calcStd(sport, grade) {
-  const cls = GRADES[grade].cls;
-  const games = (DEFAULT_GAMES[sport]||{})[grade] || [];
-  const st = {};
-  cls.forEach(c => { st[c] = {w:0,d:0,l:0,pts:0,gf:0,ga:0}; });
-  games.filter(g => g.type === '예선').forEach(g => {
-    if (!st[g.a] || !st[g.b]) return;
-    const r = getR(g.id);
-    if (!r.win) return;
-    const sa = parseInt(r.sa), sb = parseInt(r.sb);
-    if (isNaN(sa)||isNaN(sb)) return;
-    st[g.a].gf+=sa; st[g.a].ga+=sb;
-    st[g.b].gf+=sb; st[g.b].ga+=sa;
-    if (r.win==='A'){st[g.a].w++;st[g.a].pts+=3;st[g.b].l++;}
-    else if (r.win==='B'){st[g.b].w++;st[g.b].pts+=3;st[g.a].l++;}
-    else {st[g.a].d++;st[g.a].pts++;st[g.b].d++;st[g.b].pts++;}
-  });
-  return cls.map(c=>({cls:c,...st[c]})).sort((a,b)=>b.pts-a.pts||b.w-a.w||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf);
+/* ══ HOME ══ */
+function updateHomeClass(){
+  const g = document.getElementById('homeGrade').value;
+  const sel = document.getElementById('homeClass');
+  sel.innerHTML = '<option value="">반 선택</option>';
+  if(!g) return;
+  const classes = [...new Set(students.filter(s=>String(s.grade)===g).map(s=>s.cls))].sort((a,b)=>a-b);
+  classes.forEach(c=>{ const o=document.createElement('option'); o.value=c; o.textContent=c+'반'; sel.appendChild(o); });
 }
 
-function calcSportFinal(sport, grade) {
-  // 레이저런은 별도 순위 입력 사용
-  if (sport === '레이저런') {
-    const lr = (fbData.laser_rank || {})[`g${grade}`] || {};
-    const cls = GRADES[grade].cls;
-    const ranks = [lr.r1||null, lr.r2||null, lr.r3||null, lr.r4||null].slice(0, cls.length);
-    const done = ranks.filter(Boolean).length >= (cls.length >= 4 ? 4 : 3);
-    return {ranks, preRanks: ranks, finDone: done, sfDone: done, hasSf: cls.length >= 4};
-  }
+function renderHome(){
+  const grade = document.getElementById('homeGrade').value;
+  const cls   = document.getElementById('homeClass').value;
+  const list  = document.getElementById('homeProgressList');
+  if(!grade||!cls){ list.innerHTML=''; return; }
+  const sts = students.filter(s=>String(s.grade)===grade&&String(s.cls)===cls);
+  const done = sts.filter(s=>records[s.id]&&records[s.id].done).length;
+  list.innerHTML = `
+    <div class="class-item">
+      <span>${grade}학년 ${cls}반</span>
+      <span style="font-size:13px;color:#555;">${done} / ${sts.length}명 완료</span>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${sts.length?done/sts.length*100:0}%"></div></div>`;
+}
 
-  const games = (DEFAULT_GAMES[sport]||{})[grade] || [];
-  const fin = games.find(g => g.type === '결승');
-  const sf  = games.find(g => g.type === '3,4위전');
-  const preRank = calcStd(sport, grade);
-  const cls = GRADES[grade].cls;
+function startMeasure(){
+  const grade = document.getElementById('homeGrade').value;
+  const cls   = document.getElementById('homeClass').value;
+  if(!grade||!cls){ showToast('학년과 반을 선택하세요'); return; }
+  curGrade = grade; curClass = cls;
+  const sts = students.filter(s=>String(s.grade)===grade&&String(s.cls)===cls);
+  if(!sts.length){ showToast('해당 반 학생이 없습니다'); return; }
+  // 미완료 첫 학생으로
+  const firstPending = sts.findIndex(s=>!records[s.id]||!records[s.id].done);
+  curIdx = firstPending >= 0 ? firstPending : 0;
+  showTab('measure');
+}
 
-  const preLabel1 = preRank[0] ? preRank[0].cls : null;
-  const preLabel2 = preRank[1] ? preRank[1].cls : null;
-  const preLabel3 = cls.length>=3 && preRank[2] ? preRank[2].cls : null;
-  const preLabel4 = cls.length>=4 && preRank[3] ? preRank[3].cls : null;
+/* ══ MEASURE ══ */
+function renderMeasure(){
+  const sts = students.filter(s=>String(s.grade)===curGrade&&String(s.cls)===curClass);
+  if(!sts.length){ document.getElementById('measureInputs').innerHTML='<p style="color:#888;text-align:center;padding:20px;">홈에서 반을 선택 후 측정을 시작하세요.</p>'; return; }
+  const st = sts[curIdx];
+  document.getElementById('navInfo').textContent = `${curIdx+1} / ${sts.length}`;
+  document.getElementById('prevBtn').classList.toggle('disabled', curIdx===0);
+  document.getElementById('nextBtn').classList.toggle('disabled', curIdx===sts.length-1);
+  document.getElementById('measureClassInfo').textContent = `${curGrade}학년 ${curClass}반`;
+  document.getElementById('studentNum').textContent = st.num + '번';
+  document.getElementById('studentName').textContent = st.name || '학생';
+  document.getElementById('studentGender').textContent = st.gender==='남' ? '♂ 남' : '♀ 여';
 
-  let rank1=null, rank2=null, rank3=null, rank4=null;
+  const rec = records[st.id] || {};
+  let html = '';
 
-  // 결승 결과
-  const hasFinResult = !!getR(fin?.id||'').win;
-  if (fin && fin.b) {
-    const r = getR(fin.id);
-    if (r.win==='A')      { rank1=fin.a; rank2=fin.b; }
-    else if (r.win==='B') { rank1=fin.b; rank2=fin.a; }
-  }
-
-  // 3,4위전: 없으면(1학년) 결승 미진출팀이 공동 3위로 자동 확정
-  const hasSf = !!sf;
-  let sfDone = false;
-  if (!hasSf) {
-    // 1학년처럼 3,4위전 없는 경우 → 결승 미진출팀 전원 공동 3위 확정
-    const finalists = [rank1, rank2].filter(Boolean);
-    const thirdPlace = cls.filter(c => !finalists.includes(c));
-    // 결승 결과가 나온 경우에만 3위 확정
-    if (hasFinResult && thirdPlace.length > 0) {
-      rank3 = thirdPlace[0] || null;
-      rank4 = thirdPlace[1] || null;
-      sfDone = true;
-    } else if (!hasFinResult) {
-      // 결승 전이면 예선 3위를 3위 자리에 미정으로 표시
-      rank3 = null; rank4 = null; sfDone = false;
-    }
-  } else {
-    const r = getR(sf.id);
-    sfDone = !!r.win;
-    if (r.win==='A')      { rank3=sf.a; rank4=sf.b; }
-    else if (r.win==='B') { rank3=sf.b; rank4=sf.a; }
-  }
-
-  return {
-    ranks: [rank1, rank2, rank3, rank4],
-    preRanks: [preLabel1, preLabel2, preLabel3, preLabel4],
-    finDone: hasFinResult,
-    sfDone,
-    hasSf,
-    fin, sf
+  // 실시간 등급 배지 헬퍼
+  const gradeBadge = (g) => {
+    if(g===null||g===undefined) return '';
+    const labels=['','1등급','2등급','3등급','4등급','5등급'];
+    const colors=['','#1565c0','#2e7d32','#e65100','#c62828','#880000'];
+    const bgs=['','#e3f2fd','#e8f5e9','#fff3e0','#ffebee','#fce4ec'];
+    return `<span style="margin-left:6px;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;background:${bgs[g]};color:${colors[g]};">${labels[g]}</span>`;
   };
-}
+  const scoreLabel = (s) => s!==null ? `<span style="font-size:10px;color:#888;">${s}점</span>` : '';
 
-function calcTot(grade) {
-  const cls = GRADES[grade].cls;
-  const tot = {}; cls.forEach(c=>{tot[c]=0;});
-  const rankPts = [4,3,2,1];
-  ['티볼'].forEach(sp => { // 현재 티볼만 실시, 배구/피구/레이저런 실시 후 추가
-    if (!DEFAULT_GAMES[sp]) return;
-    const {ranks, finDone, sfDone} = calcSportFinal(sp, grade);
-    ranks.forEach((cls2, i) => {
-      const isDone = i < 2 ? finDone : sfDone;
-      if (cls2 && isDone && tot[cls2]!==undefined) tot[cls2] += rankPts[i]||1;
-    });
-  });
-  return cls.map(c=>({cls:c,pts:tot[c]})).sort((a,b)=>b.pts-a.pts);
-}
-
-/* ── 렌더 ── */
-function renderStd(sport, grade) {  // sport 인수 이미 있음
-  const rows = calcStd(sport, grade);
-  let h = `<div class="std-wrap"><table class="std-tbl"><thead><tr>
-    <th style="width:38px">순위</th><th>반</th>
-    <th style="width:30px">승</th><th style="width:30px">무</th><th style="width:30px">패</th>
-    ${sport!=='피구'?'<th style="width:36px">득점</th><th style="width:36px">실점</th><th style="width:36px">득실</th>':''}<th style="width:36px">승점</th>
-  </tr></thead><tbody>`;
-  rows.forEach((r,i) => {
-    const rc=i===0?'r1':i===1?'r2':i===2?'r3':'';
-    const med=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
-    h+=`<tr><td class="${rc}">${med}${i+1}</td><td class="tnm">${grade}학년 ${r.cls}</td>
-      <td>${r.w}</td><td>${r.d}</td><td>${r.l}</td>
-      ${sport!=='피구'?`<td>${r.gf}</td><td>${r.ga}</td><td style="color:${r.gf-r.ga>0?'var(--cw)':r.gf-r.ga<0?'var(--cl)':'#888'}">${r.gf-r.ga>0?'+':''}${r.gf-r.ga}</td>`:''}<td style="font-weight:700">${r.pts}</td></tr>`;
-  });
-  return h + `</tbody></table></div>`;
-}
-
-function renderGame(g, grade, sport) {
-  const r = getR(g.id);
-  const dInfo = getD(g.id);
-  const dispDate = dInfo ? dInfo.val : g.orig;
-  const changed = !!dInfo;
-  const isRain = dInfo && dInfo.isRain;
-  const canScore = !!g.b;
-
-  let tac='tb', tbc='tb';
-  if (r.win==='A'){tac+=' win';tbc+=' lose';}
-  else if (r.win==='B'){tac+=' lose';tbc+=' win';}
-  else if (r.win==='D'){tac+=' draw-t';tbc+=' draw-t';}
-
-  let sbadge = `<span class="sbadge by">미정</span>`;
-  if (r.win==='A') sbadge = `<span class="sbadge bw">${grade}학년 ${g.a} 승</span>`;
-  else if (r.win==='B') sbadge = `<span class="sbadge bw">${grade}학년 ${g.b} 승</span>`;
-  else if (r.win==='D') sbadge = `<span class="sbadge bd">무승부</span>`;
-
-  const typeCls = g.type==='예선'?'b-pre':g.type==='결승'?'b-fin':'b-sf';
-  const isDone = r.win !== '';
-  const isFinal = g.type === '결승' || g.type === '3,4위전';
-  const hideScore = isFinal || sport === '피구';
-
-  let dateEditHtml = '';
-  if (isAdmin && editingDate === g.id) {
-    dateEditHtml = `<div class="date-edit-row">
-      <input class="date-input" id="di_${g.id}" type="text" placeholder="예: 4월 10일(금)" value="${dispDate}">
-      <label class="rain-chk">
-        <input type="checkbox" id="rain_${g.id}" ${isRain?'checked':''}> 🌧️ 우천 변경
-      </label>
-      <button class="save-btn" onclick="saveDate('${g.id}')">저장</button>
-      ${changed?`<button class="cancel-btn" onclick="restoreDate('${g.id}')">원복</button>`:''}
-      <button class="cancel-btn" onclick="cancelDateEdit()">취소</button>
+  if(selectedSubjects.includes('왕복오래달리기')){
+    const runScore = getScore(st.gender, curGrade, '왕복오래달리기', rec.왕복오래달리기);
+    const runGrade = runScore!==null ? scoreToGrade(runScore) : null;
+    html += `<div class="input-group" style="grid-column:1/-1;">
+      <div class="input-label" style="display:flex;align-items:center;gap:4px;">🏃 왕복오래달리기 ${scoreLabel(runScore)}${gradeBadge(runGrade)}<span id="badge_run"></span></div>
+      <div class="input-field">
+        <input type="number" inputmode="decimal" id="i_run" value="${rec.왕복오래달리기||''}" placeholder="횟수" oninput="updateRunBadge(this.value,'${st.gender}','${curGrade}')">
+        <span class="input-unit">회</span>
+      </div>
+    </div>`;
+  }
+  if(selectedSubjects.includes('유연성')){
+    const flexScore = getFlexScore(st.gender, curGrade, rec.유연성1, rec.유연성2);
+    const flexGrade = flexScore!==null ? scoreToGrade(flexScore) : null;
+    html += `<div class="input-group">
+      <div class="input-label">🤸 유연성 1차</div>
+      <div class="input-field">
+        <input type="number" inputmode="decimal" id="i_flex1" value="${rec.유연성1||''}" placeholder="cm" oninput="updateFlexBadge()">
+        <span class="input-unit">cm</span>
+      </div>
+    </div>
+    <div class="input-group">
+      <div class="input-label" style="display:flex;align-items:center;gap:4px;">🤸 유연성 2차 ${scoreLabel(flexScore)}${gradeBadge(flexGrade)}<span id="badge_flex"></span></div>
+      <div class="input-field">
+        <input type="number" inputmode="decimal" id="i_flex2" value="${rec.유연성2||''}" placeholder="cm" oninput="updateFlexBadge()">
+        <span class="input-unit">cm</span>
+      </div>
+    </div>`;
+  }
+  if(selectedSubjects.includes('악력')){
+    const gripScore = getGripScore(st.gender, curGrade, rec.악력1u, rec.악력1l, rec.악력2u, rec.악력2l);
+    const gripGrade = gripScore!==null ? scoreToGrade(gripScore) : null;
+    html += `<div class="input-group">
+      <div class="input-label">💪 악력 1차 우</div>
+      <div class="input-field">
+        <input type="number" inputmode="decimal" id="i_grip1u" value="${rec.악력1u||''}" placeholder="kg" oninput="updateGripBadge()">
+        <span class="input-unit">kg</span>
+      </div>
+    </div>
+    <div class="input-group">
+      <div class="input-label">💪 악력 1차 좌</div>
+      <div class="input-field">
+        <input type="number" inputmode="decimal" id="i_grip1l" value="${rec.악력1l||''}" placeholder="kg" oninput="updateGripBadge()">
+        <span class="input-unit">kg</span>
+      </div>
+    </div>
+    <div class="input-group">
+      <div class="input-label">💪 악력 2차 우</div>
+      <div class="input-field">
+        <input type="number" inputmode="decimal" id="i_grip2u" value="${rec.악력2u||''}" placeholder="kg" oninput="updateGripBadge()">
+        <span class="input-unit">kg</span>
+      </div>
+    </div>
+    <div class="input-group">
+      <div class="input-label" style="display:flex;align-items:center;gap:4px;">💪 악력 2차 좌 ${scoreLabel(gripScore)}${gradeBadge(gripGrade)}<span id="badge_grip"></span></div>
+      <div class="input-field">
+        <input type="number" inputmode="decimal" id="i_grip2l" value="${rec.악력2l||''}" placeholder="kg" oninput="updateGripBadge()">
+        <span class="input-unit">kg</span>
+      </div>
+    </div>`;
+  }
+  if(selectedSubjects.includes('제자리멀리뛰기')){
+    const jumpScore = getJumpScore(st.gender, curGrade, rec.멀리뛰기1, rec.멀리뛰기2);
+    const jumpGrade = jumpScore!==null ? scoreToGrade(jumpScore) : null;
+    html += `<div class="input-group">
+      <div class="input-label">🦘 멀리뛰기 1차</div>
+      <div class="input-field">
+        <input type="number" inputmode="decimal" id="i_jump1" value="${rec.멀리뛰기1||''}" placeholder="cm" oninput="updateJumpBadge()">
+        <span class="input-unit">cm</span>
+      </div>
+    </div>
+    <div class="input-group">
+      <div class="input-label" style="display:flex;align-items:center;gap:4px;">🦘 멀리뛰기 2차 ${scoreLabel(jumpScore)}${gradeBadge(jumpGrade)}<span id="badge_jump"></span></div>
+      <div class="input-field">
+        <input type="number" inputmode="decimal" id="i_jump2" value="${rec.멀리뛰기2||''}" placeholder="cm" oninput="updateJumpBadge()">
+        <span class="input-unit">cm</span>
+      </div>
+    </div>`;
+  }
+  // 키/몸무게 - 관리자 전용
+  if(adminOn){
+    html += `<div class="input-group" style="border:2px solid #ffc107;">
+      <div class="input-label">🛡️ 📏 키 <span style="font-size:10px;color:#856404;">(관리자)</span></div>
+      <div class="input-field">
+        <input type="number" inputmode="decimal" id="i_height" value="${rec.height||''}" placeholder="cm">
+        <span class="input-unit">cm</span>
+      </div>
+    </div>
+    <div class="input-group" style="border:2px solid #ffc107;">
+      <div class="input-label">🛡️ ⚖️ 몸무게 <span style="font-size:10px;color:#856404;">(관리자)</span></div>
+      <div class="input-field">
+        <input type="number" inputmode="decimal" id="i_weight" value="${rec.weight||''}" placeholder="kg">
+        <span class="input-unit">kg</span>
+      </div>
+    </div>`;
+  } else {
+    html += `<div class="input-group" style="background:#f5f5f5;opacity:0.6;">
+      <div class="input-label">🔒 키 <span style="font-size:10px;color:#999;">(관리자 전용)</span></div>
+      <div class="input-field">
+        <input type="number" inputmode="decimal" id="i_height" value="${rec.height||''}" placeholder="관리자만 입력 가능" disabled style="background:#eee;color:#aaa;">
+        <span class="input-unit">cm</span>
+      </div>
+    </div>
+    <div class="input-group" style="background:#f5f5f5;opacity:0.6;">
+      <div class="input-label">🔒 몸무게 <span style="font-size:10px;color:#999;">(관리자 전용)</span></div>
+      <div class="input-field">
+        <input type="number" inputmode="decimal" id="i_weight" value="${rec.weight||''}" placeholder="관리자만 입력 가능" disabled style="background:#eee;color:#aaa;">
+        <span class="input-unit">kg</span>
+      </div>
     </div>`;
   }
 
-  let scoreHtml = '';
-  if (!canScore) {
-    scoreHtml = `<div class="inp-row"><span class="viewer-score">일정 추후 공지</span></div>`;
-  } else if (isAdmin) {
-    if (hideScore) {
-      const winA = r.win==='A', winB = r.win==='B';
-      scoreHtml = `<div class="inp-row" style="flex-wrap:wrap;gap:6px">
-        <span style="font-size:11px;color:#888">승리팀 선택:</span>
-        <button class="win-pick-btn${winA?' wpick-on':''}" onclick="pickWinner('${g.id}','A')">${grade}학년 ${g.a} 승</button>
-        <button class="win-pick-btn${winB?' wpick-on':''}" onclick="pickWinner('${g.id}','B')">${grade}학년 ${g.b} 승</button>
-        ${isDone?`<button class="cancel-btn" style="font-size:11px" onclick="clearWinner('${g.id}')">초기화</button>`:''}
-      </div>`;
-    } else {
-      scoreHtml = `<div class="inp-row">
-        <span style="font-size:11px;color:#888">결과 입력:</span>
-        <input class="sc-inp" type="number" min="0" id="sa_${g.id}" value="${r.sa}" placeholder="0">
-        <span style="font-size:13px;color:#aaa">:</span>
-        <input class="sc-inp" type="number" min="0" id="sb_${g.id}" value="${r.sb}" placeholder="0">
-        <button class="save-btn" onclick="doSaveScore('${g.id}')">저장</button>
-        ${sbadge}
-      </div>`;
-    }
-  } else {
-    if (hideScore) {
-      scoreHtml = isDone
-        ? `<div class="inp-row">${sbadge}</div>`
-        : `<div class="inp-row"><span class="viewer-score">경기 결과 대기 중</span></div>`;
-    } else {
-      scoreHtml = isDone
-        ? `<div class="inp-row">${sbadge}${r.sa!==''?`<span style="font-size:13px;color:#555;font-weight:700;margin-left:4px">${r.sa} : ${r.sb}</span>`:''}</div>`
-        : `<div class="inp-row"><span class="viewer-score">경기 결과 대기 중</span></div>`;
-    }
-  }
-
-  let editBtnHtml = isAdmin
-    ? `<button class="edit-btn" onclick="toggleDateEdit('${g.id}')">✏️ 일정 수정</button>
-       ${changed?`<button class="restore-btn" onclick="restoreDate('${g.id}')">원복</button>`:''}`
-    : '';
-
-  return `<div class="gc${isRain?' rained':''}${isDone?' done':''}">
-    <div class="ghd">
-      <div class="gdate-area">
-        <span class="gdate${changed?' changed':''}">📅 ${dispDate}${isRain?' 🌧️':changed?' ✏️':''}</span>
-        ${editBtnHtml}
-      </div>
-      <span class="gbadge ${typeCls}">${g.type}</span>
-    </div>
-    ${dateEditHtml}
-    <div class="gteams">
-      <div class="${tac}">
-        <div class="cls">${grade}학년 ${g.a}</div>
-        ${canScore&&!hideScore?`<div class="sc">${r.sa!==''?r.sa:'-'}</div>`:''}
-      </div>
-      <div class="vs">VS</div>
-      <div class="${tbc}">
-        <div class="cls">${g.b?grade+'학년 '+g.b:''}</div>
-        ${canScore&&!hideScore?`<div class="sc">${r.sb!==''?r.sb:'-'}</div>`:''}
-      </div>
-    </div>
-    ${scoreHtml}
-  </div>`;
+  document.getElementById('measureInputs').innerHTML = html;
+  document.getElementById('memoInput').value = rec.memo || '';
+  // 기존 기록 있으면 즉시 총점 배지 표시
+  setTimeout(updateLiveTotal, 0);
 }
 
-function renderLaserRun() {
-  const rankPts = [4,3,2,1];
-  const medals = ['🥇','🥈','🥉','4위'];
-  const rankCls = ['sfc-r1','sfc-r2','sfc-r3',''];
-  let h = `<div class="tot-wrap">`;
+function getVal(id){ const el=document.getElementById(id); return el ? el.value.trim() : ''; }
 
-  [1,2,3].forEach(g => {
-    const cls = GRADES[g].cls;
-    const numRanks = cls.length;
-    const lr = (fbData.laser_rank || {})[`g${g}`] || {};
-    h += `<div class="tot-sec">
-      <h3 style="margin-bottom:4px">${g}학년 레이저런 순위</h3>
-      <p style="font-size:11px;color:#888;margin-bottom:10px">🎯 레이저런은 학년별 순위로만 운영됩니다.</p>`;
+/* ── 실시간 등급 배지 업데이트 ── */
+function _gradeBadgeHTML(g, s){
+  if(g===null||g===undefined||s===null) return '';
+  const labels=['','1등급','2등급','3등급','4등급','5등급'];
+  const colors=['','#1565c0','#2e7d32','#e65100','#c62828','#880000'];
+  const bgs=['','#e3f2fd','#e8f5e9','#fff3e0','#ffebee','#fce4ec'];
+  return `<span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;background:${bgs[g]};color:${colors[g]};">${s}점 · ${labels[g]}</span>`;
+}
+function _curSt(){
+  const sts=students.filter(s=>String(s.grade)===curGrade&&String(s.cls)===curClass);
+  return sts[curIdx]||null;
+}
+function updateRunBadge(v){
+  const st=_curSt(); if(!st) return;
+  const s=getScore(st.gender,curGrade,'왕복오래달리기',v);
+  const el=document.getElementById('badge_run');
+  if(el) el.innerHTML = s!==null ? _gradeBadgeHTML(scoreToGrade(s),s) : '';
+  updateLiveTotal();
+}
+function updateFlexBadge(){
+  const st=_curSt(); if(!st) return;
+  const v1=getVal('i_flex1'), v2=getVal('i_flex2');
+  const s=getFlexScore(st.gender,curGrade,v1,v2);
+  const el=document.getElementById('badge_flex');
+  if(el) el.innerHTML = s!==null ? _gradeBadgeHTML(scoreToGrade(s),s) : '';
+  updateLiveTotal();
+}
+function updateGripBadge(){
+  const st=_curSt(); if(!st) return;
+  const s=getGripScore(st.gender,curGrade,getVal('i_grip1u'),getVal('i_grip1l'),getVal('i_grip2u'),getVal('i_grip2l'));
+  const el=document.getElementById('badge_grip');
+  if(el) el.innerHTML = s!==null ? _gradeBadgeHTML(scoreToGrade(s),s) : '';
+  updateLiveTotal();
+}
+function updateJumpBadge(){
+  const st=_curSt(); if(!st) return;
+  const s=getJumpScore(st.gender,curGrade,getVal('i_jump1'),getVal('i_jump2'));
+  const el=document.getElementById('badge_jump');
+  if(el) el.innerHTML = s!==null ? _gradeBadgeHTML(scoreToGrade(s),s) : '';
+  updateLiveTotal();
+}
+function updateLiveTotal(){
+  const st=_curSt(); if(!st) return;
+  const tmpRec={
+    grade:parseInt(curGrade), gender:st.gender,
+    왕복오래달리기: getVal('i_run'),
+    유연성1: getVal('i_flex1'), 유연성2: getVal('i_flex2'),
+    악력1u: getVal('i_grip1u'), 악력1l: getVal('i_grip1l'),
+    악력2u: getVal('i_grip2u'), 악력2l: getVal('i_grip2l'),
+    멀리뛰기1: getVal('i_jump1'), 멀리뛰기2: getVal('i_jump2'),
+  };
+  const {total, grade} = calcTotal(tmpRec);
+  const el=document.getElementById('liveTotalBadge');
+  if(!el) return;
+  if(total===null){ el.innerHTML=''; return; }
+  const labels=['','1등급','2등급','3등급','4등급','5등급'];
+  const colors=['','#1565c0','#2e7d32','#e65100','#c62828','#880000'];
+  const bgs=['','#e3f2fd','#e8f5e9','#fff3e0','#ffebee','#fce4ec'];
+  el.innerHTML=`<span style="background:${bgs[grade]};color:${colors[grade]};padding:4px 14px;border-radius:12px;font-weight:800;font-size:14px;">${total}점 · ${labels[grade]}</span>`;
+}
 
-    if (isAdmin) {
-      // 관리자: 드롭다운으로 순위 직접 입력
-      h += `<div style="display:flex;flex-direction:column;gap:8px;background:#f8faff;border-radius:10px;padding:12px;margin-bottom:10px">
-        <p style="font-size:11px;color:var(--cp);font-weight:600;margin-bottom:2px">✏️ 순위를 직접 선택하세요</p>`;
-      for (let ri = 0; ri < numRanks; ri++) {
-        const curVal = lr[`r${ri+1}`] || '';
-        const pts = rankPts[ri] || 1;
-        // 이미 선택된 반 목록 (현재 순위 제외)
-        h += `<div style="display:flex;align-items:center;gap:10px">
-          <span style="font-size:13px;font-weight:700;min-width:56px;color:${ri===0?'var(--cg)':ri===1?'#888780':ri===2?'#854F0B':'#555'}">${medals[ri]} ${pts}점</span>
-          <select id="lr_${g}_${ri+1}" onchange="saveLaserRank(${g},${ri+1})"
-            style="flex:1;padding:6px 10px;font-size:13px;border:1.5px solid #dde3f0;border-radius:7px;background:#fff;font-family:inherit;color:#1a1a2e">
-            <option value="">-- 선택 --</option>
-            ${cls.map(c => `<option value="${c}" ${curVal===c?'selected':''}>${g}학년 ${c}</option>`).join('')}
-          </select>
-          ${curVal ? `<span style="font-size:12px;color:var(--cw);font-weight:600">✓ ${g}학년 ${curVal}</span>` : ''}
-        </div>`;
-      }
-      h += `</div>`;
-    }
+function saveMeasure(){
+  const sts = students.filter(s=>String(s.grade)===curGrade&&String(s.cls)===curClass);
+  if(!sts.length) return;
+  const st = sts[curIdx];
+  const rec = records[st.id] || {};
 
-    // 순위 카드 (관리자/참여자 모두 표시)
-    const hasAny = Object.values(lr).some(v => v);
-    if (hasAny || isAdmin) {
-      h += `<div class="sfgrid" style="grid-template-columns:repeat(${numRanks},1fr)">`;
-      for (let ri = 0; ri < numRanks; ri++) {
-        const team = lr[`r${ri+1}`] || null;
-        const pts = rankPts[ri] || 1;
-        const tbd = !team;
-        h += `<div class="sfcard ${rankCls[ri]||''}${tbd?' sfc-tbd':''}">
-          <div class="sfc-rank">${medals[ri]}</div>
-          <div class="sfc-team">${team ? `${g}학년 ${team}` : '미정'}</div>
-          <div class="sfc-pts">${tbd ? '–' : pts+'점'}</div>
-        </div>`;
-      }
-      h += `</div>`;
-    } else {
-      h += `<div style="background:#f8faff;border-radius:8px;padding:10px 14px;font-size:12px;color:#888;border:0.5px dashed #dde3f0">
-        ⏳ 아직 순위가 입력되지 않았습니다.
-      </div>`;
-    }
-    h += `</div>`;
+  rec.grade   = parseInt(curGrade);
+  rec.gender  = st.gender;
+  if(selectedSubjects.includes('왕복오래달리기')) rec.왕복오래달리기 = getVal('i_run');
+  if(selectedSubjects.includes('유연성')){ rec.유연성1=getVal('i_flex1'); rec.유연성2=getVal('i_flex2'); }
+  if(selectedSubjects.includes('악력')){ rec.악력1u=getVal('i_grip1u'); rec.악력1l=getVal('i_grip1l'); rec.악력2u=getVal('i_grip2u'); rec.악력2l=getVal('i_grip2l'); }
+  if(selectedSubjects.includes('제자리멀리뛰기')){ rec.멀리뛰기1=getVal('i_jump1'); rec.멀리뛰기2=getVal('i_jump2'); }
+  // 키/몸무게: 관리자만 수정 가능, 비관리자는 기존 값 유지
+  if(adminOn){
+    rec.height = getVal('i_height');
+    rec.weight = getVal('i_weight');
+  }
+  // adminOn 아닐 때는 rec.height, rec.weight 기존 값 그대로 유지
+  rec.memo    = document.getElementById('memoInput').value;
+  rec.done    = true;
+  records[st.id] = rec;
+  localStorage.setItem('paps_records', JSON.stringify(records));
+
+  if(curIdx < sts.length-1){ curIdx++; renderMeasure(); }
+  else { document.getElementById('completeModal').classList.add('show'); }
+}
+
+function prevStudent(){
+  if(curIdx>0){ curIdx--; renderMeasure(); }
+}
+function nextStudent(){
+  const sts = students.filter(s=>String(s.grade)===curGrade&&String(s.cls)===curClass);
+  if(curIdx<sts.length-1){ curIdx++; renderMeasure(); }
+}
+function closeComplete(){ document.getElementById('completeModal').classList.remove('show'); }
+
+/* ══ DASHBOARD ══ */
+function setDashGrade(g, el){ dashGradeFilter=g; document.querySelectorAll('#tab-dash .filter-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); dashClassFilter_='all'; renderDash(); }
+
+function renderDash(){
+  let data = students.map(s=>({...s, rec: records[s.id]||{}}));
+  if(dashGradeFilter!=='all') data=data.filter(s=>String(s.grade)===dashGradeFilter);
+
+  // class filter buttons
+  const classes = [...new Set(data.map(s=>s.grade+'학년 '+s.cls+'반'))].sort();
+  const cf = document.getElementById('dashClassFilter');
+  cf.innerHTML = `<button class="class-filter-btn ${dashClassFilter_==='all'?'active':''}" onclick="setDashClass('all',this)">전체 반</button>`;
+  classes.forEach(c=>{ cf.innerHTML+=`<button class="class-filter-btn ${dashClassFilter_===c?'active':''}" onclick="setDashClass('${c}',this)">${c}</button>`; });
+
+  if(dashClassFilter_!=='all') data=data.filter(s=>s.grade+'학년 '+s.cls+'반'===dashClassFilter_);
+
+  const total=data.length, done=data.filter(s=>s.rec.done).length;
+  document.getElementById('dashTotal').textContent=total;
+  document.getElementById('dashDone').textContent=done;
+  document.getElementById('dashPending').textContent=total-done;
+
+  const tbody=document.getElementById('dashBody');
+  tbody.innerHTML=data.map(s=>{
+    const r=s.rec;
+    const bmi = r.height&&r.weight ? (parseFloat(r.weight)/(parseFloat(r.height)/100)**2).toFixed(1) : '-';
+    const grip = r.악력1u||r.악력1l ? Math.max(parseFloat(r.악력1u)||0,parseFloat(r.악력1l)||0,parseFloat(r.악력2u)||0,parseFloat(r.악력2l)||0).toFixed(1) : '-';
+    const flex = r.유연성1!==undefined ? Math.max(parseFloat(r.유연성1)||-999,parseFloat(r.유연성2)||-999) : '-';
+    const jump = r.멀리뛰기1!==undefined ? Math.max(parseFloat(r.멀리뛰기1)||0,parseFloat(r.멀리뛰기2)||0) : '-';
+    const status = r.done ? '<span class="g2">완료</span>' : '<span style="color:#888">미완료</span>';
+    return `<tr><td>${s.grade}-${s.cls}-${s.num}</td><td>${s.name||'-'}</td><td>${s.gender}</td><td>${r.왕복오래달리기||'-'}</td><td>${grip}</td><td>${jump==='-'?'-':jump}</td><td>${flex==='-999'||flex===-999?'-':flex}</td><td>${r.height||'-'}</td><td>${r.weight||'-'}</td><td>${bmi}</td><td>${status}</td></tr>`;
+  }).join('');
+}
+function setDashClass(c,el){ dashClassFilter_=c; document.querySelectorAll('#dashClassFilter .class-filter-btn').forEach(t=>t.classList.remove('active')); el.classList.add('active'); renderDash(); }
+
+/* ══ GRADE ══ */
+function setGradeFilter(g, el){ gradeGradeFilter=g; document.querySelectorAll('#tab-grade .filter-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); gradeClassFilter_='all'; renderGrade(); }
+
+function renderGrade(){
+  let data = students.map(s=>({...s, rec: records[s.id]||{}})).filter(s=>s.rec.done);
+  if(gradeGradeFilter!=='all') data=data.filter(s=>String(s.grade)===gradeGradeFilter);
+
+  const classes = [...new Set(data.map(s=>s.grade+'학년 '+s.cls+'반'))].sort();
+  const cf = document.getElementById('gradeClassFilter');
+  cf.innerHTML = `<button class="class-filter-btn ${gradeClassFilter_==='all'?'active':''}" onclick="setGradeClass('all',this)">전체 반</button>`;
+  classes.forEach(c=>{ cf.innerHTML+=`<button class="class-filter-btn ${gradeClassFilter_===c?'active':''}" onclick="setGradeClass('${c}',this)">${c}</button>`; });
+
+  if(gradeClassFilter_!=='all') data=data.filter(s=>s.grade+'학년 '+s.cls+'반'===gradeClassFilter_);
+
+  // Grade counts
+  const gc=[0,0,0,0,0];
+  data.forEach(s=>{ const {grade}=calcTotal({...s.rec, grade:s.grade, gender:s.gender}); if(grade>=1&&grade<=5) gc[grade-1]++; });
+  for(let i=1;i<=5;i++) document.getElementById('gc'+i).textContent=gc[i-1];
+
+  const tbody=document.getElementById('gradeBody');
+  tbody.innerHTML=data.map(s=>{
+    const r=s.rec;
+    const gr=String(s.grade), g=s.gender;
+    // 각 종목 점수
+    const runScore  = getScore(g,gr,'왕복오래달리기',r.왕복오래달리기);
+    const flexScore = getFlexScore(g,gr,r.유연성1,r.유연성2);
+    const gripScore = getGripScore(g,gr,r.악력1u,r.악력1l,r.악력2u,r.악력2l);
+    const jumpScore = getJumpScore(g,gr,r.멀리뛰기1,r.멀리뛰기2);
+    const {total, grade} = calcTotal({...r, grade:s.grade, gender:s.gender});
+    const gClass = grade ? 'g'+grade : '';
+    const gripBest = r.악력1u||r.악력1l ? Math.max(parseFloat(r.악력1u)||0,parseFloat(r.악력1l)||0,parseFloat(r.악력2u)||0,parseFloat(r.악력2l)||0).toFixed(1) : '-';
+    const flexBest = r.유연성1!==undefined ? (() => { const v=Math.max(parseFloat(r.유연성1)||-999,parseFloat(r.유연성2)||-999); return v===-999?'-':v; })() : '-';
+    const jumpBest = r.멀리뛰기1!==undefined ? Math.max(parseFloat(r.멀리뛰기1)||0,parseFloat(r.멀리뛰기2)||0)||'-' : '-';
+    return `<tr>
+      <td>${s.grade}-${s.cls}-${s.num}</td>
+      <td>${s.name||'-'}</td>
+      <td>${s.gender}</td>
+      <td>${r.왕복오래달리기||'-'}${runScore!==null?'<br><small style="color:#888">'+runScore+'점</small>':''}</td>
+      <td>${gripBest}${gripScore!==null?'<br><small style="color:#888">'+gripScore+'점</small>':''}</td>
+      <td>${jumpBest}${jumpScore!==null?'<br><small style="color:#888">'+jumpScore+'점</small>':''}</td>
+      <td>${flexBest}${flexScore!==null?'<br><small style="color:#888">'+flexScore+'점</small>':''}</td>
+      <td><strong>${total!==null?total+'점':'-'}</strong></td>
+      <td>${grade?'<span class="'+gClass+'">'+grade+'등급</span>':'-'}</td>
+    </tr>`;
+  }).join('');
+}
+function setGradeClass(c,el){ gradeClassFilter_=c; document.querySelectorAll('#gradeClassFilter .class-filter-btn').forEach(t=>t.classList.remove('active')); el.classList.add('active'); renderGrade(); }
+
+/* ══ EXCEL DOWNLOAD ══ */
+function downloadExcel(){
+  const rows = [['학년','반','번호','이름','왕복오래달리기','유연성1차','유연성2차','악력1차(우)','악력1차(좌)','악력2차(우)','악력2차(좌)','제자리멀리뛰기1차','제자리멀리뛰기2차','키','몸무게']];
+  students.forEach(s=>{
+    const r = records[s.id]||{};
+    rows.push([
+      s.grade, s.cls, s.num, s.name||'',
+      r.왕복오래달리기||'',
+      r.유연성1||'', r.유연성2||'',
+      r.악력1u||'', r.악력1l||'', r.악력2u||'', r.악력2l||'',
+      r.멀리뛰기1||'', r.멀리뛰기2||'',
+      r.height||'', r.weight||''
+    ]);
   });
-  return h + `</div>`;
+  const csv = rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const bom = '\uFEFF';
+  const blob = new Blob([bom+csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='PAPS_2026_측정결과.csv'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('엑셀 다운로드 완료');
 }
 
-function renderTot() {
-  const sportInfo = {티볼:'⚾',배구:'🏐',피구:'🔴',레이저런:'🎯'};
-  const rankPts = [4,3,2,1];
-  const medals = ['🥇','🥈','🥉','4위'];
-  const rankCls = ['sfc-r1','sfc-r2','sfc-r3',''];
-
-  let h = `<div class="tot-wrap">`;
-  [1,2,3].forEach(g => {
-    const cls = GRADES[g].cls;
-    h += `<div class="tot-sec">`;
-
-    // ── 종목별 최종 순위 ──
-    h += `<h3 style="margin-bottom:10px">${g}학년 종목별 최종 순위</h3>`;
-    ['티볼'].forEach(sp => { // 현재 티볼만 실시
-      if (!DEFAULT_GAMES[sp]) return;
-      const {ranks, preRanks, finDone, sfDone, hasSf, fin, sf} = calcSportFinal(sp, g);
-      const icon = sportInfo[sp];
-      h += `<div class="sport-final-wrap"><h4><span class="sport-icon">${icon}</span>${sp}</h4>`;
-
-      const numShow = cls.length; // 1학년=3, 2,3학년=4
-      // ── 관리자: 결승/3,4위전 승리팀 선택 UI ──
-      if (isAdmin) {
-        // 결승 입력
-        if (fin && fin.b) {
-          const rFin = getR(fin.id);
-          const winA = rFin.win==='A', winB = rFin.win==='B';
-          const finA = preRanks[0]||fin.a, finB = preRanks[1]||fin.b;
-          h += `<div style="background:#f8faff;border-radius:8px;padding:10px;margin-bottom:6px">
-            <p style="font-size:11px;color:#888;margin-bottom:6px">🏆 결승 승리팀 선택 (예선 1,2위)</p>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <button class="win-pick-btn${winA?' wpick-on':''}" onclick="pickWinner('${fin.id}','A')">${g}학년 ${finA} 승</button>
-              <button class="win-pick-btn${winB?' wpick-on':''}" onclick="pickWinner('${fin.id}','B')">${g}학년 ${finB} 승</button>
-              ${finDone?`<button class="cancel-btn" style="font-size:11px" onclick="clearWinner('${fin.id}')">초기화</button>`:''}
-            </div>
-          </div>`;
-        }
-        // 3,4위전 입력 (4반 이상 학년만) / 1학년은 자동처리 안내
-        if (hasSf && sf && sf.b) {
-          const rSf = getR(sf.id);
-          const winA = rSf.win==='A', winB = rSf.win==='B';
-          const sfA = preRanks[2]||sf.a, sfB = preRanks[3]||sf.b;
-          h += `<div style="background:#f8faff;border-radius:8px;padding:10px;margin-bottom:6px">
-            <p style="font-size:11px;color:#888;margin-bottom:6px">🥉 3,4위전 승리팀 선택 (예선 3,4위)</p>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <button class="win-pick-btn${winA?' wpick-on':''}" onclick="pickWinner('${sf.id}','A')">${g}학년 ${sfA} 승</button>
-              <button class="win-pick-btn${winB?' wpick-on':''}" onclick="pickWinner('${sf.id}','B')">${g}학년 ${sfB} 승</button>
-              ${sfDone?`<button class="cancel-btn" style="font-size:11px" onclick="clearWinner('${sf.id}')">초기화</button>`:''}
-            </div>
-          </div>`;
-        } else if (!hasSf) {
-          h += `<div style="background:#f0faf4;border-radius:8px;padding:8px 12px;margin-bottom:6px;font-size:11px;color:var(--cw)">
-            ✅ 3위: 결승 미진출팀이 결승 결과 입력 후 자동 확정됩니다.
-          </div>`;
-        }
-      }
-
-      // ── 순위 카드 표시 ──
-      h += `<div class="sfgrid" style="grid-template-columns:repeat(${numShow},1fr)">`;
-      for (let i=0; i<numShow; i++) {
-        const isDone = i < 2 ? finDone : sfDone;
-        const team = ranks[i];
-        const pts = rankPts[i] || 1;
-        const tbd = !team || !isDone;
-        // 미정이지만 예선순위 알 경우 서브텍스트 표시
-        const sub = tbd && preRanks[i] ? `<div style="font-size:10px;color:#aaa;margin-top:1px">예선 ${i+1}위</div>` : '';
-        const teamDisp = !tbd ? `${g}학년 ${team}` : (preRanks[i] ? `${g}학년 ${preRanks[i]}` : '미정');
-        // 1학년 공동3위 처리 (hasSf=false이고 i>=2이고 sfDone)
-        const isSharedThird = !hasSf && i===2 && sfDone;
-        const rankLabel = isSharedThird ? '🥉 공동 3위' : (medals[i]||'');
-        h += `<div class="sfcard ${rankCls[i]||''}${tbd?' sfc-tbd':''}">
-          <div class="sfc-rank">${rankLabel}</div>
-          <div class="sfc-team">${teamDisp}</div>
-          ${sub}
-          <div class="sfc-pts">${tbd?'미정':pts+'점'}</div>
-        </div>`;
-      }
-      h += `</div></div>`;
-    });
-
-    // ── 배구/피구: 미실시 안내 ──
-    ['배구','피구'].forEach(sp => {
-      const icon = sportInfo[sp];
-      h += `<div class="sport-final-wrap">
-        <h4><span class="sport-icon">${icon}</span>${sp}</h4>
-        <div style="background:#f8faff;border-radius:8px;padding:10px 14px;font-size:12px;color:#888;border:0.5px dashed #dde3f0">
-          ⏳ 아직 실시하지 않은 종목입니다.
-        </div>
-      </div>`;
-    });
-    // ── 레이저런: 미실시 안내 / 관리자는 순위 입력 가능 ──
-    {
-      const lr = (fbData.laser_rank || {})[`g${g}`] || {};
-      const lrCls = GRADES[g].cls;
-      const numRanks = lrCls.length;
-      const hasAnyRank = Object.keys(lr).length > 0;
-      h += `<div class="sport-final-wrap">
-        <h4><span class="sport-icon">🎯</span>레이저런</h4>`;
-      if (isAdmin) {
-        h += `<div style="display:flex;flex-direction:column;gap:6px;background:#f8faff;border-radius:8px;padding:10px;margin-bottom:4px">
-          <p style="font-size:11px;color:#888;margin-bottom:2px">순위를 직접 선택하세요</p>`;
-        for (let ri=0; ri<numRanks; ri++) {
-          const curVal = lr[`r${ri+1}`] || '';
-          const pts = rankPts[ri] || 1;
-          h += `<div style="display:flex;align-items:center;gap:8px">
-            <span style="font-size:12px;font-weight:700;min-width:48px">${medals[ri]} ${pts}점</span>
-            <select id="lr_${g}_${ri+1}" onchange="saveLaserRank(${g},${ri+1})" style="flex:1;padding:5px 8px;font-size:13px;border:1.5px solid #dde3f0;border-radius:6px;background:#fff;font-family:inherit">
-              <option value="">-- 선택 --</option>
-              ${lrCls.map(c=>`<option value="${c}" ${curVal===c?'selected':''}>${g}학년 ${c}</option>`).join('')}
-            </select>
-          </div>`;
-        }
-        h += `</div>`;
-      } else if (hasAnyRank) {
-        h += `<div class="sfgrid" style="grid-template-columns:repeat(${numRanks},1fr)">`;
-        for (let ri=0; ri<numRanks; ri++) {
-          const team = lr[`r${ri+1}`] || null;
-          const pts = rankPts[ri] || 1;
-          const tbd = !team;
-          h += `<div class="sfcard ${rankCls[ri]||''}${tbd?' sfc-tbd':''}">
-            <div class="sfc-rank">${medals[ri]||''}</div>
-            <div class="sfc-team">${team ? `${g}학년 ${team}` : '미정'}</div>
-            <div class="sfc-pts">${pts}점</div>
-          </div>`;
-        }
-        h += `</div>`;
-      } else {
-        h += `<div style="background:#f8faff;border-radius:8px;padding:10px 14px;font-size:12px;color:#888;border:0.5px dashed #dde3f0">
-          ⏳ 아직 실시하지 않은 종목입니다.
-        </div>`;
-      }
-      h += `</div>`;
-    }
-
-    // ── 종합 순위 ──
-    const tot = calcTot(g);
-    h += `<div style="border-top:0.5px solid #eef0f6;margin-top:4px;padding-top:12px">
-      <h3 style="margin-bottom:6px">${g}학년 종합 순위</h3>
-      <p style="font-size:11px;color:#888;margin-bottom:10px">현재 실시 종목 순위 점수 합산 (1위=4점 · 2위=3점 · 3위=2점 · 4위=1점)</p>
-      <div class="pgrid">`;
-    tot.forEach((row,i) => {
-      const rc=i===0?'r1c':i===1?'r2c':i===2?'r3c':'';
-      const med=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
-      h+=`<div class="pc ${rc}">
-        <div class="pr">${med} ${i+1}위</div>
-        <div class="pt">${g}학년 ${row.cls}</div>
-        <div class="pp">${row.pts}점</div>
-        <div class="pd">/ 티볼 기준</div>
-      </div>`;
-    });
-    h += `</div></div></div>`;
-  });
-  return h + `</div>`;
+/* ══ RESET ══ */
+function showDeleteModal(){ document.getElementById('deleteModal').classList.add('show'); }
+function closeDeleteModal(){ document.getElementById('deleteModal').classList.remove('show'); }
+function doReset(){
+  records={};
+  localStorage.setItem('paps_records','{}');
+  closeDeleteModal(); renderDash(); renderGrade(); showToast('기록이 삭제되었습니다');
 }
 
-function render() {
-  const sports = ['티볼','배구','피구','레이저런','종합'];
-  const icons = {티볼:'⚾',배구:'🏐',피구:'🔴',레이저런:'🎯',종합:'📊'};
-  document.getElementById('tabs').innerHTML = sports.map(s =>
-    `<button class="tab${curSport===s?' on':''}" onclick="selSport('${s}')">${icons[s]} ${s}</button>`
-  ).join('');
-
-  const el = document.getElementById('main');
-  if (curSport === '종합') { el.innerHTML = renderTot(); return; }
-  if (curSport === '레이저런') { el.innerHTML = renderLaserRun(); return; }
-
-  const gkeys = Object.keys(DEFAULT_GAMES[curSport]||{}).map(Number);
-  let h = `<div class="gbtn-row">${gkeys.map(g =>
-    `<button class="gbtn${curGrade===g?' on':''}" onclick="selGrade(${g})">${g}학년</button>`
-  ).join('')}</div>`;
-
-  const all = (DEFAULT_GAMES[curSport]||{})[curGrade] || [];
-  const pre = all.filter(g => g.type === '예선');
-  const rest = all.filter(g => g.type !== '예선');
-
-  if (pre.some(g => GRADES[curGrade].cls.includes(g.a))) {
-    h += `<div class="sec-title">📋 ${curGrade}학년 예선 순위표</div>${renderStd(curSport,curGrade)}`;
-  }
-
-  const adminNote = isAdmin ? '<small>— ✏️ 버튼으로 일정 수정 가능</small>' : '';
-  h += `<div class="sec-title">📅 예선 경기 일정/결과 ${adminNote}</div>`;
-  h += `<div class="legend">
-    <span class="legend-item"><span class="ldot" style="background:var(--cw)"></span>승리</span>
-    <span class="legend-item"><span class="ldot" style="background:var(--cl)"></span>패배</span>
-    <span class="legend-item"><span class="ldot" style="background:var(--cd)"></span>무승부</span>
-    <span class="legend-item"><span class="ldot" style="background:#ccc"></span>미정</span>
-  </div>`;
-  h += `<div class="glist">${pre.map(g => renderGame(g, curGrade, curSport)).join('')}</div>`;
-
-  if (rest.length) {
-    h += `<div class="sec-title">🏆 결선 경기</div>
-      <div class="glist">${rest.map(g => renderGame(g, curGrade, curSport)).join('')}</div>`;
-  }
-  el.innerHTML = h;
+/* ══ TOAST ══ */
+function showToast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
 }
 
-window.selSport = (s) => { curSport=s; curGrade=1; editingDate=null; render(); };
-window.selGrade = (g) => { curGrade=g; editingDate=null; render(); };
-window.toggleDateEdit = (id) => { editingDate=editingDate===id?null:id; render(); };
-window.cancelDateEdit = () => { editingDate=null; render(); };
-window.saveDate = async (id) => {
-  const v = document.getElementById('di_'+id)?.value?.trim()||'';
-  const rain = document.getElementById('rain_'+id)?.checked||false;
-  if (v) await setD(id,v,rain);
-};
-window.restoreDate = async (id) => { await clearD(id); };
-window.saveLaserRank = async (grade, rankNum) => {
-  const sel = document.getElementById(`lr_${grade}_${rankNum}`);
-  if (!sel) return;
-  const val = sel.value;
-  await set(ref(db, `league2026/laser_rank/g${grade}/r${rankNum}`), val || null);
-};
-window.pickWinner = async (id, side) => {
-  const win = side;
-  await set(ref(db, `league2026/results/${id}`), {sa:'', sb:'', win});
-};
-window.clearWinner = async (id) => {
-  await set(ref(db, `league2026/results/${id}`), {sa:'', sb:'', win:''});
-};
-window.doSaveScore = async (id) => {
-  const sa = document.getElementById('sa_'+id)?.value||'';
-  const sb = document.getElementById('sb_'+id)?.value||'';
-  await setR(id,sa,sb);
-};
+/* ══ SAVE: 키/몸무게는 관리자만 수정 가능 ══ */
+// saveMeasure의 height/weight 저장 시 관리자 여부 체크는 renderMeasure에서 disabled 처리로 이미 보호됨
+// 단, disabled 필드는 getVal이 빈값 반환하므로 기존 값 보존 처리
+const _origSave = saveMeasure;
+
+/* ══ 실제 학생 명렬표 (286명) ══ */
+const REAL_STUDENTS = [{"id":"1-1-1","grade":1,"cls":1,"num":1,"name":"강민정","gender":"여"},{"id":"1-1-2","grade":1,"cls":1,"num":2,"name":"김도희","gender":"여"},{"id":"1-1-3","grade":1,"cls":1,"num":3,"name":"김아라","gender":"여"},{"id":"1-1-4","grade":1,"cls":1,"num":4,"name":"김채현","gender":"여"},{"id":"1-1-5","grade":1,"cls":1,"num":5,"name":"박주연","gender":"여"},{"id":"1-1-6","grade":1,"cls":1,"num":6,"name":"서수아","gender":"여"},{"id":"1-1-7","grade":1,"cls":1,"num":7,"name":"신예주","gender":"여"},{"id":"1-1-8","grade":1,"cls":1,"num":8,"name":"윤예진","gender":"여"},{"id":"1-1-10","grade":1,"cls":1,"num":10,"name":"장윤서","gender":"여"},{"id":"1-1-11","grade":1,"cls":1,"num":11,"name":"정지우","gender":"여"},{"id":"1-1-12","grade":1,"cls":1,"num":12,"name":"조아윤","gender":"여"},{"id":"1-1-13","grade":1,"cls":1,"num":13,"name":"한지연","gender":"여"},{"id":"1-1-14","grade":1,"cls":1,"num":14,"name":"SAIM MUHAMMAD","gender":"남"},{"id":"1-1-15","grade":1,"cls":1,"num":15,"name":"김동규","gender":"남"},{"id":"1-1-16","grade":1,"cls":1,"num":16,"name":"김태웅","gender":"남"},{"id":"1-1-17","grade":1,"cls":1,"num":17,"name":"문익재","gender":"남"},{"id":"1-1-18","grade":1,"cls":1,"num":18,"name":"박제준","gender":"남"},{"id":"1-1-19","grade":1,"cls":1,"num":19,"name":"송선규","gender":"남"},{"id":"1-1-20","grade":1,"cls":1,"num":20,"name":"우동하","gender":"남"},{"id":"1-1-21","grade":1,"cls":1,"num":21,"name":"이동욱","gender":"남"},{"id":"1-1-22","grade":1,"cls":1,"num":22,"name":"이용석","gender":"남"},{"id":"1-1-23","grade":1,"cls":1,"num":23,"name":"이지오","gender":"남"},{"id":"1-1-24","grade":1,"cls":1,"num":24,"name":"이화담","gender":"남"},{"id":"1-1-25","grade":1,"cls":1,"num":25,"name":"정믿음","gender":"남"},{"id":"1-1-26","grade":1,"cls":1,"num":26,"name":"정이현","gender":"남"},{"id":"1-1-27","grade":1,"cls":1,"num":27,"name":"하동훈","gender":"남"},{"id":"1-2-1","grade":1,"cls":2,"num":1,"name":"강다은","gender":"여"},{"id":"1-2-2","grade":1,"cls":2,"num":2,"name":"김라윤","gender":"여"},{"id":"1-2-3","grade":1,"cls":2,"num":3,"name":"김수정","gender":"여"},{"id":"1-2-4","grade":1,"cls":2,"num":4,"name":"김하린","gender":"여"},{"id":"1-2-5","grade":1,"cls":2,"num":5,"name":"박재인","gender":"여"},{"id":"1-2-6","grade":1,"cls":2,"num":6,"name":"성시윤","gender":"여"},{"id":"1-2-7","grade":1,"cls":2,"num":7,"name":"신수지","gender":"여"},{"id":"1-2-8","grade":1,"cls":2,"num":8,"name":"안다희","gender":"여"},{"id":"1-2-9","grade":1,"cls":2,"num":9,"name":"윤채영","gender":"여"},{"id":"1-2-10","grade":1,"cls":2,"num":10,"name":"이세민","gender":"여"},{"id":"1-2-11","grade":1,"cls":2,"num":11,"name":"정아연","gender":"여"},{"id":"1-2-12","grade":1,"cls":2,"num":12,"name":"정지민","gender":"여"},{"id":"1-2-13","grade":1,"cls":2,"num":13,"name":"최미나","gender":"여"},{"id":"1-2-14","grade":1,"cls":2,"num":14,"name":"하수아","gender":"여"},{"id":"1-2-15","grade":1,"cls":2,"num":15,"name":"김유진","gender":"남"},{"id":"1-2-16","grade":1,"cls":2,"num":16,"name":"김은찬","gender":"남"},{"id":"1-2-17","grade":1,"cls":2,"num":17,"name":"박건우","gender":"남"},{"id":"1-2-18","grade":1,"cls":2,"num":18,"name":"박단","gender":"남"},{"id":"1-2-19","grade":1,"cls":2,"num":19,"name":"송예준","gender":"남"},{"id":"1-2-20","grade":1,"cls":2,"num":20,"name":"신희철","gender":"남"},{"id":"1-2-21","grade":1,"cls":2,"num":21,"name":"이민혁","gender":"남"},{"id":"1-2-22","grade":1,"cls":2,"num":22,"name":"이수안","gender":"남"},{"id":"1-2-23","grade":1,"cls":2,"num":23,"name":"이지훈","gender":"남"},{"id":"1-2-24","grade":1,"cls":2,"num":24,"name":"이호준","gender":"남"},{"id":"1-2-25","grade":1,"cls":2,"num":25,"name":"정시윤","gender":"남"},{"id":"1-2-26","grade":1,"cls":2,"num":26,"name":"조성민","gender":"남"},{"id":"1-2-27","grade":1,"cls":2,"num":27,"name":"한태진","gender":"남"},{"id":"1-3-1","grade":1,"cls":3,"num":1,"name":"김나연","gender":"여"},{"id":"1-3-2","grade":1,"cls":3,"num":2,"name":"김다정","gender":"여"},{"id":"1-3-3","grade":1,"cls":3,"num":3,"name":"김여나","gender":"여"},{"id":"1-3-4","grade":1,"cls":3,"num":4,"name":"김채원","gender":"여"},{"id":"1-3-5","grade":1,"cls":3,"num":5,"name":"변지민","gender":"여"},{"id":"1-3-6","grade":1,"cls":3,"num":6,"name":"변채빈","gender":"여"},{"id":"1-3-7","grade":1,"cls":3,"num":7,"name":"양다희","gender":"여"},{"id":"1-3-8","grade":1,"cls":3,"num":8,"name":"이시은","gender":"여"},{"id":"1-3-9","grade":1,"cls":3,"num":9,"name":"이채원","gender":"여"},{"id":"1-3-10","grade":1,"cls":3,"num":10,"name":"정하늘","gender":"여"},{"id":"1-3-11","grade":1,"cls":3,"num":11,"name":"정하은","gender":"여"},{"id":"1-3-12","grade":1,"cls":3,"num":12,"name":"NEMATOV ZHASSURBEK","gender":"남"},{"id":"1-3-13","grade":1,"cls":3,"num":13,"name":"곽지호","gender":"남"},{"id":"1-3-14","grade":1,"cls":3,"num":14,"name":"구가람","gender":"남"},{"id":"1-3-15","grade":1,"cls":3,"num":15,"name":"남궁시후","gender":"남"},{"id":"1-3-16","grade":1,"cls":3,"num":16,"name":"노현우","gender":"남"},{"id":"1-3-17","grade":1,"cls":3,"num":17,"name":"박준형","gender":"남"},{"id":"1-3-18","grade":1,"cls":3,"num":18,"name":"성찬혁","gender":"남"},{"id":"1-3-19","grade":1,"cls":3,"num":19,"name":"우시율","gender":"남"},{"id":"1-3-20","grade":1,"cls":3,"num":20,"name":"이남규","gender":"남"},{"id":"1-3-21","grade":1,"cls":3,"num":21,"name":"이태운","gender":"남"},{"id":"1-3-22","grade":1,"cls":3,"num":22,"name":"이주환","gender":"남"},{"id":"1-3-23","grade":1,"cls":3,"num":23,"name":"전으뜸","gender":"남"},{"id":"1-3-24","grade":1,"cls":3,"num":24,"name":"정규진","gender":"남"},{"id":"1-3-25","grade":1,"cls":3,"num":25,"name":"최재영","gender":"남"},{"id":"1-3-26","grade":1,"cls":3,"num":26,"name":"최하윤","gender":"남"},{"id":"1-3-27","grade":1,"cls":3,"num":27,"name":"허민","gender":"남"},{"id":"2-1-1","grade":2,"cls":1,"num":1,"name":"김나현","gender":"여"},{"id":"2-1-2","grade":2,"cls":1,"num":2,"name":"김민서","gender":"여"},{"id":"2-1-3","grade":2,"cls":1,"num":3,"name":"김민지","gender":"여"},{"id":"2-1-4","grade":2,"cls":1,"num":4,"name":"김세진","gender":"여"},{"id":"2-1-5","grade":2,"cls":1,"num":5,"name":"김예서","gender":"여"},{"id":"2-1-6","grade":2,"cls":1,"num":6,"name":"김지혜","gender":"여"},{"id":"2-1-7","grade":2,"cls":1,"num":7,"name":"김하람","gender":"여"},{"id":"2-1-8","grade":2,"cls":1,"num":8,"name":"김한나","gender":"여"},{"id":"2-1-9","grade":2,"cls":1,"num":9,"name":"류시원","gender":"여"},{"id":"2-1-10","grade":2,"cls":1,"num":10,"name":"박가현","gender":"여"},{"id":"2-1-11","grade":2,"cls":1,"num":11,"name":"박은서","gender":"여"},{"id":"2-1-12","grade":2,"cls":1,"num":12,"name":"박채린","gender":"여"},{"id":"2-1-13","grade":2,"cls":1,"num":13,"name":"우별하","gender":"여"},{"id":"2-1-14","grade":2,"cls":1,"num":14,"name":"유은아","gender":"여"},{"id":"2-1-15","grade":2,"cls":1,"num":15,"name":"강보승","gender":"남"},{"id":"2-1-16","grade":2,"cls":1,"num":16,"name":"김승준","gender":"남"},{"id":"2-1-17","grade":2,"cls":1,"num":17,"name":"김시율","gender":"남"},{"id":"2-1-18","grade":2,"cls":1,"num":18,"name":"김치헌","gender":"남"},{"id":"2-1-19","grade":2,"cls":1,"num":19,"name":"남광훈","gender":"남"},{"id":"2-1-20","grade":2,"cls":1,"num":20,"name":"박현서","gender":"남"},{"id":"2-1-21","grade":2,"cls":1,"num":21,"name":"송민규","gender":"남"},{"id":"2-1-22","grade":2,"cls":1,"num":22,"name":"이동기","gender":"남"},{"id":"2-1-23","grade":2,"cls":1,"num":23,"name":"이주원","gender":"남"},{"id":"2-1-24","grade":2,"cls":1,"num":24,"name":"임재혁","gender":"남"},{"id":"2-1-25","grade":2,"cls":1,"num":25,"name":"허준석","gender":"남"},{"id":"2-1-26","grade":2,"cls":1,"num":26,"name":"홍찬우","gender":"남"},{"id":"2-1-27","grade":2,"cls":1,"num":27,"name":"황정윤","gender":"남"},{"id":"2-1-28","grade":2,"cls":1,"num":28,"name":"김규빈","gender":"남"},{"id":"2-2-1","grade":2,"cls":2,"num":1,"name":"김미소","gender":"여"},{"id":"2-2-2","grade":2,"cls":2,"num":2,"name":"김서아","gender":"여"},{"id":"2-2-3","grade":2,"cls":2,"num":3,"name":"박소윤","gender":"여"},{"id":"2-2-4","grade":2,"cls":2,"num":4,"name":"서하영","gender":"여"},{"id":"2-2-5","grade":2,"cls":2,"num":5,"name":"송예빈","gender":"여"},{"id":"2-2-6","grade":2,"cls":2,"num":6,"name":"여은서","gender":"여"},{"id":"2-2-7","grade":2,"cls":2,"num":7,"name":"윤채은","gender":"여"},{"id":"2-2-8","grade":2,"cls":2,"num":8,"name":"전지윤","gender":"여"},{"id":"2-2-9","grade":2,"cls":2,"num":9,"name":"정은아","gender":"여"},{"id":"2-2-10","grade":2,"cls":2,"num":10,"name":"정재이","gender":"여"},{"id":"2-2-11","grade":2,"cls":2,"num":11,"name":"주연하","gender":"여"},{"id":"2-2-12","grade":2,"cls":2,"num":12,"name":"천다은","gender":"여"},{"id":"2-2-13","grade":2,"cls":2,"num":13,"name":"최성경","gender":"여"},{"id":"2-2-14","grade":2,"cls":2,"num":14,"name":"최오름","gender":"여"},{"id":"2-2-15","grade":2,"cls":2,"num":15,"name":"황하율","gender":"여"},{"id":"2-2-16","grade":2,"cls":2,"num":16,"name":"고희승","gender":"남"},{"id":"2-2-17","grade":2,"cls":2,"num":17,"name":"김동규","gender":"남"},{"id":"2-2-18","grade":2,"cls":2,"num":18,"name":"김서준","gender":"남"},{"id":"2-2-19","grade":2,"cls":2,"num":19,"name":"노우찬","gender":"남"},{"id":"2-2-20","grade":2,"cls":2,"num":20,"name":"박영광","gender":"남"},{"id":"2-2-21","grade":2,"cls":2,"num":21,"name":"송세민","gender":"남"},{"id":"2-2-22","grade":2,"cls":2,"num":22,"name":"이정민","gender":"남"},{"id":"2-2-23","grade":2,"cls":2,"num":23,"name":"이희성","gender":"남"},{"id":"2-2-24","grade":2,"cls":2,"num":24,"name":"정민우","gender":"남"},{"id":"2-2-25","grade":2,"cls":2,"num":25,"name":"조성훈","gender":"남"},{"id":"2-2-26","grade":2,"cls":2,"num":26,"name":"조주원","gender":"남"},{"id":"2-2-27","grade":2,"cls":2,"num":27,"name":"최용빈","gender":"남"},{"id":"2-2-28","grade":2,"cls":2,"num":28,"name":"최현규","gender":"남"},{"id":"2-3-1","grade":2,"cls":3,"num":1,"name":"구미주","gender":"여"},{"id":"2-3-2","grade":2,"cls":3,"num":2,"name":"길유나","gender":"여"},{"id":"2-3-3","grade":2,"cls":3,"num":3,"name":"김도희","gender":"여"},{"id":"2-3-4","grade":2,"cls":3,"num":4,"name":"김민설","gender":"여"},{"id":"2-3-5","grade":2,"cls":3,"num":5,"name":"김보영","gender":"여"},{"id":"2-3-6","grade":2,"cls":3,"num":6,"name":"김아름","gender":"여"},{"id":"2-3-7","grade":2,"cls":3,"num":7,"name":"문지인","gender":"여"},{"id":"2-3-8","grade":2,"cls":3,"num":8,"name":"양하빈","gender":"여"},{"id":"2-3-9","grade":2,"cls":3,"num":9,"name":"유채은","gender":"여"},{"id":"2-3-10","grade":2,"cls":3,"num":10,"name":"이나연","gender":"여"},{"id":"2-3-11","grade":2,"cls":3,"num":11,"name":"이소윤","gender":"여"},{"id":"2-3-12","grade":2,"cls":3,"num":12,"name":"이한별","gender":"여"},{"id":"2-3-13","grade":2,"cls":3,"num":13,"name":"장초희","gender":"여"},{"id":"2-3-14","grade":2,"cls":3,"num":14,"name":"주민경","gender":"여"},{"id":"2-3-15","grade":2,"cls":3,"num":15,"name":"김민준","gender":"남"},{"id":"2-3-16","grade":2,"cls":3,"num":16,"name":"김산","gender":"남"},{"id":"2-3-18","grade":2,"cls":3,"num":18,"name":"박선호","gender":"남"},{"id":"2-3-19","grade":2,"cls":3,"num":19,"name":"서희승","gender":"남"},{"id":"2-3-20","grade":2,"cls":3,"num":20,"name":"송진우","gender":"남"},{"id":"2-3-21","grade":2,"cls":3,"num":21,"name":"안호림","gender":"남"},{"id":"2-3-22","grade":2,"cls":3,"num":22,"name":"이두영","gender":"남"},{"id":"2-3-23","grade":2,"cls":3,"num":23,"name":"장민기","gender":"남"},{"id":"2-3-24","grade":2,"cls":3,"num":24,"name":"정종민","gender":"남"},{"id":"2-3-25","grade":2,"cls":3,"num":25,"name":"조민석","gender":"남"},{"id":"2-3-26","grade":2,"cls":3,"num":26,"name":"한현진","gender":"남"},{"id":"2-3-27","grade":2,"cls":3,"num":27,"name":"황성민","gender":"남"},{"id":"2-4-1","grade":2,"cls":4,"num":1,"name":"강다희","gender":"여"},{"id":"2-4-2","grade":2,"cls":4,"num":2,"name":"강혜빈","gender":"여"},{"id":"2-4-3","grade":2,"cls":4,"num":3,"name":"김민서","gender":"여"},{"id":"2-4-4","grade":2,"cls":4,"num":4,"name":"김보경","gender":"여"},{"id":"2-4-5","grade":2,"cls":4,"num":5,"name":"김세은","gender":"여"},{"id":"2-4-6","grade":2,"cls":4,"num":6,"name":"김예원","gender":"여"},{"id":"2-4-7","grade":2,"cls":4,"num":7,"name":"김율아","gender":"여"},{"id":"2-4-8","grade":2,"cls":4,"num":8,"name":"박서연","gender":"여"},{"id":"2-4-9","grade":2,"cls":4,"num":9,"name":"배윤서","gender":"여"},{"id":"2-4-10","grade":2,"cls":4,"num":10,"name":"송세경","gender":"여"},{"id":"2-4-11","grade":2,"cls":4,"num":11,"name":"신여진","gender":"여"},{"id":"2-4-12","grade":2,"cls":4,"num":12,"name":"윤서현","gender":"여"},{"id":"2-4-13","grade":2,"cls":4,"num":13,"name":"이혜인","gender":"여"},{"id":"2-4-14","grade":2,"cls":4,"num":14,"name":"정하린","gender":"여"},{"id":"2-4-15","grade":2,"cls":4,"num":15,"name":"강병국","gender":"남"},{"id":"2-4-16","grade":2,"cls":4,"num":16,"name":"강성룡","gender":"남"},{"id":"2-4-17","grade":2,"cls":4,"num":17,"name":"김가람","gender":"남"},{"id":"2-4-18","grade":2,"cls":4,"num":18,"name":"민준영","gender":"남"},{"id":"2-4-19","grade":2,"cls":4,"num":19,"name":"박건호","gender":"남"},{"id":"2-4-20","grade":2,"cls":4,"num":20,"name":"이은규","gender":"남"},{"id":"2-4-21","grade":2,"cls":4,"num":21,"name":"이준서","gender":"남"},{"id":"2-4-22","grade":2,"cls":4,"num":22,"name":"이창민","gender":"남"},{"id":"2-4-23","grade":2,"cls":4,"num":23,"name":"장성욱","gender":"남"},{"id":"2-4-24","grade":2,"cls":4,"num":24,"name":"조민석","gender":"남"},{"id":"2-4-25","grade":2,"cls":4,"num":25,"name":"탁민수","gender":"남"},{"id":"2-4-26","grade":2,"cls":4,"num":26,"name":"허동우","gender":"남"},{"id":"2-4-27","grade":2,"cls":4,"num":27,"name":"허율","gender":"남"},{"id":"3-1-1","grade":3,"cls":1,"num":1,"name":"김가연","gender":"여"},{"id":"3-1-2","grade":3,"cls":1,"num":2,"name":"김가윤","gender":"여"},{"id":"3-1-3","grade":3,"cls":1,"num":3,"name":"김수정","gender":"여"},{"id":"3-1-4","grade":3,"cls":1,"num":4,"name":"김지유","gender":"여"},{"id":"3-1-5","grade":3,"cls":1,"num":5,"name":"문세연","gender":"여"},{"id":"3-1-6","grade":3,"cls":1,"num":6,"name":"신예슬","gender":"여"},{"id":"3-1-7","grade":3,"cls":1,"num":7,"name":"염운경","gender":"여"},{"id":"3-1-8","grade":3,"cls":1,"num":8,"name":"이지유","gender":"여"},{"id":"3-1-9","grade":3,"cls":1,"num":9,"name":"이태희","gender":"여"},{"id":"3-1-10","grade":3,"cls":1,"num":10,"name":"김민준","gender":"남"},{"id":"3-1-11","grade":3,"cls":1,"num":11,"name":"김범진","gender":"남"},{"id":"3-1-12","grade":3,"cls":1,"num":12,"name":"김성우","gender":"남"},{"id":"3-1-13","grade":3,"cls":1,"num":13,"name":"박성빈","gender":"남"},{"id":"3-1-14","grade":3,"cls":1,"num":14,"name":"서승환","gender":"남"},{"id":"3-1-15","grade":3,"cls":1,"num":15,"name":"유현우","gender":"남"},{"id":"3-1-16","grade":3,"cls":1,"num":16,"name":"이동규","gender":"남"},{"id":"3-1-17","grade":3,"cls":1,"num":17,"name":"이재준","gender":"남"},{"id":"3-1-18","grade":3,"cls":1,"num":18,"name":"조백암","gender":"남"},{"id":"3-1-19","grade":3,"cls":1,"num":19,"name":"조신우","gender":"남"},{"id":"3-1-20","grade":3,"cls":1,"num":20,"name":"주하랑","gender":"남"},{"id":"3-1-21","grade":3,"cls":1,"num":21,"name":"진우진","gender":"남"},{"id":"3-1-22","grade":3,"cls":1,"num":22,"name":"최윤혁","gender":"남"},{"id":"3-1-23","grade":3,"cls":1,"num":23,"name":"하준원","gender":"남"},{"id":"3-1-24","grade":3,"cls":1,"num":24,"name":"부현민","gender":"남"},{"id":"3-1-25","grade":3,"cls":1,"num":25,"name":"김지민","gender":"여"},{"id":"3-2-1","grade":3,"cls":2,"num":1,"name":"김나현","gender":"여"},{"id":"3-2-2","grade":3,"cls":2,"num":2,"name":"김은별","gender":"여"},{"id":"3-2-3","grade":3,"cls":2,"num":3,"name":"김지은","gender":"여"},{"id":"3-2-4","grade":3,"cls":2,"num":4,"name":"성유림","gender":"여"},{"id":"3-2-5","grade":3,"cls":2,"num":5,"name":"신소윤","gender":"여"},{"id":"3-2-6","grade":3,"cls":2,"num":6,"name":"장아영","gender":"여"},{"id":"3-2-7","grade":3,"cls":2,"num":7,"name":"장하효","gender":"여"},{"id":"3-2-8","grade":3,"cls":2,"num":8,"name":"정아인","gender":"여"},{"id":"3-2-9","grade":3,"cls":2,"num":9,"name":"조현진","gender":"여"},{"id":"3-2-24","grade":3,"cls":2,"num":24,"name":"임유이","gender":"여"},{"id":"3-2-10","grade":3,"cls":2,"num":10,"name":"김도훈","gender":"남"},{"id":"3-2-11","grade":3,"cls":2,"num":11,"name":"김재훈","gender":"남"},{"id":"3-2-12","grade":3,"cls":2,"num":12,"name":"박기백","gender":"남"},{"id":"3-2-13","grade":3,"cls":2,"num":13,"name":"박시후","gender":"남"},{"id":"3-2-14","grade":3,"cls":2,"num":14,"name":"박재민","gender":"남"},{"id":"3-2-15","grade":3,"cls":2,"num":15,"name":"배재현","gender":"남"},{"id":"3-2-16","grade":3,"cls":2,"num":16,"name":"송정우","gender":"남"},{"id":"3-2-17","grade":3,"cls":2,"num":17,"name":"이강산","gender":"남"},{"id":"3-2-18","grade":3,"cls":2,"num":18,"name":"이경민","gender":"남"},{"id":"3-2-19","grade":3,"cls":2,"num":19,"name":"이현서","gender":"남"},{"id":"3-2-20","grade":3,"cls":2,"num":20,"name":"임한결","gender":"남"},{"id":"3-2-21","grade":3,"cls":2,"num":21,"name":"정성빈","gender":"남"},{"id":"3-2-22","grade":3,"cls":2,"num":22,"name":"조채훈","gender":"남"},{"id":"3-2-23","grade":3,"cls":2,"num":23,"name":"조형우","gender":"남"},{"id":"3-3-1","grade":3,"cls":3,"num":1,"name":"강경희","gender":"여"},{"id":"3-3-2","grade":3,"cls":3,"num":2,"name":"김나언","gender":"여"},{"id":"3-3-3","grade":3,"cls":3,"num":3,"name":"배민서","gender":"여"},{"id":"3-3-4","grade":3,"cls":3,"num":4,"name":"오예림","gender":"여"},{"id":"3-3-5","grade":3,"cls":3,"num":5,"name":"우혜윤","gender":"여"},{"id":"3-3-6","grade":3,"cls":3,"num":6,"name":"이수정","gender":"여"},{"id":"3-3-7","grade":3,"cls":3,"num":7,"name":"이아린","gender":"여"},{"id":"3-3-8","grade":3,"cls":3,"num":8,"name":"지세빈","gender":"여"},{"id":"3-3-9","grade":3,"cls":3,"num":9,"name":"천민재","gender":"여"},{"id":"3-3-10","grade":3,"cls":3,"num":10,"name":"구승빈","gender":"남"},{"id":"3-3-11","grade":3,"cls":3,"num":11,"name":"박윤","gender":"남"},{"id":"3-3-12","grade":3,"cls":3,"num":12,"name":"박준석","gender":"남"},{"id":"3-3-13","grade":3,"cls":3,"num":13,"name":"신유철","gender":"남"},{"id":"3-3-14","grade":3,"cls":3,"num":14,"name":"신지환","gender":"남"},{"id":"3-3-15","grade":3,"cls":3,"num":15,"name":"윤수현","gender":"남"},{"id":"3-3-16","grade":3,"cls":3,"num":16,"name":"이석하","gender":"남"},{"id":"3-3-17","grade":3,"cls":3,"num":17,"name":"이성호","gender":"남"},{"id":"3-3-18","grade":3,"cls":3,"num":18,"name":"이시후","gender":"남"},{"id":"3-3-19","grade":3,"cls":3,"num":19,"name":"이연후","gender":"남"},{"id":"3-3-20","grade":3,"cls":3,"num":20,"name":"이지원","gender":"남"},{"id":"3-3-21","grade":3,"cls":3,"num":21,"name":"이하온","gender":"남"},{"id":"3-3-22","grade":3,"cls":3,"num":22,"name":"임준범","gender":"남"},{"id":"3-3-23","grade":3,"cls":3,"num":23,"name":"전서현","gender":"남"},{"id":"3-3-24","grade":3,"cls":3,"num":24,"name":"최예준","gender":"남"},{"id":"3-4-1","grade":3,"cls":4,"num":1,"name":"박은빈","gender":"여"},{"id":"3-4-2","grade":3,"cls":4,"num":2,"name":"박준희","gender":"여"},{"id":"3-4-3","grade":3,"cls":4,"num":3,"name":"서민정","gender":"여"},{"id":"3-4-4","grade":3,"cls":4,"num":4,"name":"송채은","gender":"여"},{"id":"3-4-5","grade":3,"cls":4,"num":5,"name":"유서연","gender":"여"},{"id":"3-4-6","grade":3,"cls":4,"num":6,"name":"이영채","gender":"여"},{"id":"3-4-7","grade":3,"cls":4,"num":7,"name":"조수경","gender":"여"},{"id":"3-4-8","grade":3,"cls":4,"num":8,"name":"차지윤","gender":"여"},{"id":"3-4-9","grade":3,"cls":4,"num":9,"name":"허서은","gender":"여"},{"id":"3-4-10","grade":3,"cls":4,"num":10,"name":"김동현","gender":"남"},{"id":"3-4-11","grade":3,"cls":4,"num":11,"name":"도용환","gender":"남"},{"id":"3-4-12","grade":3,"cls":4,"num":12,"name":"서이준","gender":"남"},{"id":"3-4-13","grade":3,"cls":4,"num":13,"name":"신서윤","gender":"남"},{"id":"3-4-14","grade":3,"cls":4,"num":14,"name":"안도현","gender":"남"},{"id":"3-4-15","grade":3,"cls":4,"num":15,"name":"이동건","gender":"남"},{"id":"3-4-16","grade":3,"cls":4,"num":16,"name":"이승현","gender":"남"},{"id":"3-4-17","grade":3,"cls":4,"num":17,"name":"이정빈","gender":"남"},{"id":"3-4-18","grade":3,"cls":4,"num":18,"name":"이현민","gender":"남"},{"id":"3-4-19","grade":3,"cls":4,"num":19,"name":"이현준","gender":"남"},{"id":"3-4-20","grade":3,"cls":4,"num":20,"name":"임준혁","gender":"남"},{"id":"3-4-21","grade":3,"cls":4,"num":21,"name":"임철민","gender":"남"},{"id":"3-4-22","grade":3,"cls":4,"num":22,"name":"주민규","gender":"남"},{"id":"3-4-23","grade":3,"cls":4,"num":23,"name":"최한규","gender":"남"},{"id":"3-4-24","grade":3,"cls":4,"num":24,"name":"부현진","gender":"남"}];
+
+/* ══ INIT: 실제 학생 명렬표 로드 ══ */
+// localStorage에 저장된 데이터가 있으면 유지, 없으면 실제 명렬표로 초기화
+// 항상 실제 명렬표를 students로 사용 (이름/성별 고정, 기록만 별도 저장)
+students = REAL_STUDENTS;
+localStorage.setItem('paps_students', JSON.stringify(students));
+
+updateHomeClass();
+renderHome();
 </script>
 </body>
 </html>
