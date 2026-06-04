@@ -429,16 +429,12 @@ function calcSportFinal(sport, grade) {
 
   let rank1=null, rank2=null, rank3=null, rank4=null;
 
-  // 결승 결과: fin.a/fin.b 대신 예선순위(preRanks) 기준으로 승패 해석
-  // Firebase에는 'A'/'B' 저장되지만 실제 팀은 preRanks[0/1]
+  // 결승 결과: fin.a/fin.b 기준으로 승패 해석 (실제 반이름 그대로 사용)
   const hasFinResult = !!getR(fin?.id||'').win;
   if (fin) {
     const r = getR(fin.id);
-    // A = preRanks[0](예선1위팀), B = preRanks[1](예선2위팀)
-    const teamA = preLabel1 || fin.a;
-    const teamB = preLabel2 || fin.b;
-    if (r.win==='A')      { rank1=teamA; rank2=teamB; }
-    else if (r.win==='B') { rank1=teamB; rank2=teamA; }
+    if (r.win==='A')      { rank1=fin.a; rank2=fin.b; }
+    else if (r.win==='B') { rank1=fin.b; rank2=fin.a; }
   }
 
   // 3,4위전: 없으면(1학년) 결승 미진출팀이 공동 3위로 자동 확정
@@ -457,11 +453,8 @@ function calcSportFinal(sport, grade) {
   } else {
     const r = getR(sf.id);
     sfDone = !!r.win;
-    // A = preRanks[2](예선3위팀), B = preRanks[3](예선4위팀)
-    const teamA = preLabel3 || sf.a;
-    const teamB = preLabel4 || sf.b;
-    if (r.win==='A')      { rank3=teamA; rank4=teamB; }
-    else if (r.win==='B') { rank3=teamB; rank4=teamA; }
+    if (r.win==='A')      { rank3=sf.a; rank4=sf.b; }
+    else if (r.win==='B') { rank3=sf.b; rank4=sf.a; }
   }
 
   return {
@@ -692,7 +685,7 @@ function renderTot() {
         if (fin && fin.b) {
           const rFin = getR(fin.id);
           const winA = rFin.win==='A', winB = rFin.win==='B';
-          const finA = preRanks[0]||fin.a, finB = preRanks[1]||fin.b;
+          const finA = fin.a, finB = fin.b;
           h += `<div style="background:#f8faff;border-radius:8px;padding:10px;margin-bottom:6px">
             <p style="font-size:11px;color:#888;margin-bottom:6px">🏆 결승 승리팀 선택 (예선 1,2위)</p>
             <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -706,7 +699,7 @@ function renderTot() {
         if (hasSf && sf && sf.b) {
           const rSf = getR(sf.id);
           const winA = rSf.win==='A', winB = rSf.win==='B';
-          const sfA = preRanks[2]||sf.a, sfB = preRanks[3]||sf.b;
+          const sfA = sf.a, sfB = sf.b;
           h += `<div style="background:#f8faff;border-radius:8px;padding:10px;margin-bottom:6px">
             <p style="font-size:11px;color:#888;margin-bottom:6px">🥉 3,4위전 승리팀 선택 (예선 3,4위)</p>
             <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -730,8 +723,9 @@ function renderTot() {
         const pts = rankPts[i] || 1;
         const tbd = !team || !isDone;
         // 미정이지만 예선순위 알 경우 서브텍스트 표시
-        const sub = tbd && preRanks[i] ? `<div style="font-size:10px;color:#aaa;margin-top:1px">예선 ${i+1}위</div>` : '';
-        const teamDisp = !tbd ? `${g}학년 ${team}` : (preRanks[i] ? `${g}학년 ${preRanks[i]}` : '미정');
+        const preTeam = [fin?.a||null, fin?.b||null, sf?.a||null, sf?.b||null][i];
+        const sub = tbd && preTeam ? `<div style="font-size:10px;color:#aaa;margin-top:1px">예선 진출팀</div>` : '';
+        const teamDisp = !tbd ? `${g}학년 ${team}` : (preTeam ? `${g}학년 ${preTeam}` : '미정');
         // 1학년 공동3위 처리 (hasSf=false이고 i>=2이고 sfDone)
         const isSharedThird = !hasSf && i===2 && sfDone;
         const rankLabel = isSharedThird ? '🥉 공동 3위' : (medals[i]||'');
