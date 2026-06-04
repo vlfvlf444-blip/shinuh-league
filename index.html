@@ -396,9 +396,11 @@ function calcStd(sport, grade) {
     const r = getR(g.id);
     if (!r.win) return;
     const sa = parseInt(r.sa), sb = parseInt(r.sb);
-    if (isNaN(sa)||isNaN(sb)) return;
-    st[g.a].gf+=sa; st[g.a].ga+=sb;
-    st[g.b].gf+=sb; st[g.b].ga+=sa;
+    // 점수 있는 경우 득점/실점 반영 (티볼·배구), 없어도 승패는 처리 (피구)
+    if (!isNaN(sa) && !isNaN(sb)) {
+      st[g.a].gf+=sa; st[g.a].ga+=sb;
+      st[g.b].gf+=sb; st[g.b].ga+=sa;
+    }
     if (r.win==='A'){st[g.a].w++;st[g.a].pts+=3;st[g.b].l++;}
     else if (r.win==='B'){st[g.b].w++;st[g.b].pts+=3;st[g.a].l++;}
     else {st[g.a].d++;st[g.a].pts++;st[g.b].d++;st[g.b].pts++;}
@@ -433,8 +435,11 @@ function calcSportFinal(sport, grade) {
   const hasFinResult = !!getR(fin?.id||'').win;
   if (fin) {
     const r = getR(fin.id);
-    if (r.win==='A')      { rank1=fin.a; rank2=fin.b; }
-    else if (r.win==='B') { rank1=fin.b; rank2=fin.a; }
+    // gA/gB: 예선순위로 교체된 팀 이름 사용 (renderGame과 일치)
+    const finA = (preRank[0] ? preRank[0].cls : fin.a);
+    const finB = (preRank[1] ? preRank[1].cls : fin.b);
+    if (r.win==='A')      { rank1=finA; rank2=finB; }
+    else if (r.win==='B') { rank1=finB; rank2=finA; }
   }
 
   // 3,4위전: 없으면(1학년) 결승 미진출팀이 공동 3위로 자동 확정
@@ -453,8 +458,10 @@ function calcSportFinal(sport, grade) {
   } else {
     const r = getR(sf.id);
     sfDone = !!r.win;
-    if (r.win==='A')      { rank3=sf.a; rank4=sf.b; }
-    else if (r.win==='B') { rank3=sf.b; rank4=sf.a; }
+    const sfA = (preRank[2] ? preRank[2].cls : sf.a);
+    const sfB = (preRank[3] ? preRank[3].cls : sf.b);
+    if (r.win==='A')      { rank3=sfA; rank4=sfB; }
+    else if (r.win==='B') { rank3=sfB; rank4=sfA; }
   }
 
   return {
@@ -501,6 +508,18 @@ function renderStd(sport, grade) {  // sport 인수 이미 있음
 }
 
 function renderGame(g, grade, sport) {
+  // 결승/3,4위전: 예선 순위로 팀 이름 자동 교체
+  let gA = g.a, gB = g.b;
+  if (g.type === '결승' || g.type === '3,4위전') {
+    const preRank = calcStd(sport, grade);
+    if (g.type === '결승') {
+      gA = preRank[0] ? preRank[0].cls : g.a;
+      gB = preRank[1] ? preRank[1].cls : g.b;
+    } else { // 3,4위전
+      gA = preRank[2] ? preRank[2].cls : g.a;
+      gB = preRank[3] ? preRank[3].cls : g.b;
+    }
+  }
   const r = getR(g.id);
   const dInfo = getD(g.id);
   const dispDate = dInfo ? dInfo.val : g.orig;
@@ -514,8 +533,8 @@ function renderGame(g, grade, sport) {
   else if (r.win==='D'){tac+=' draw-t';tbc+=' draw-t';}
 
   let sbadge = `<span class="sbadge by">미정</span>`;
-  if (r.win==='A') sbadge = `<span class="sbadge bw">${grade}학년 ${g.a} 승</span>`;
-  else if (r.win==='B') sbadge = `<span class="sbadge bw">${grade}학년 ${g.b} 승</span>`;
+  if (r.win==='A') sbadge = `<span class="sbadge bw">${grade}학년 ${gA} 승</span>`;
+  else if (r.win==='B') sbadge = `<span class="sbadge bw">${grade}학년 ${gB} 승</span>`;
   else if (r.win==='D') sbadge = `<span class="sbadge bd">무승부</span>`;
 
   const typeCls = g.type==='예선'?'b-pre':g.type==='결승'?'b-fin':'b-sf';
@@ -544,8 +563,8 @@ function renderGame(g, grade, sport) {
       const winA = r.win==='A', winB = r.win==='B';
       scoreHtml = `<div class="inp-row" style="flex-wrap:wrap;gap:6px">
         <span style="font-size:11px;color:#888">승리팀 선택:</span>
-        <button class="win-pick-btn${winA?' wpick-on':''}" onclick="pickWinner('${g.id}','A')">${grade}학년 ${g.a} 승</button>
-        <button class="win-pick-btn${winB?' wpick-on':''}" onclick="pickWinner('${g.id}','B')">${grade}학년 ${g.b} 승</button>
+        <button class="win-pick-btn${winA?' wpick-on':''}" onclick="pickWinner('${g.id}','A')">${grade}학년 ${gA} 승</button>
+        <button class="win-pick-btn${winB?' wpick-on':''}" onclick="pickWinner('${g.id}','B')">${grade}학년 ${gB} 승</button>
         ${isDone?`<button class="cancel-btn" style="font-size:11px" onclick="clearWinner('${g.id}')">초기화</button>`:''}
       </div>`;
     } else {
@@ -586,12 +605,12 @@ function renderGame(g, grade, sport) {
     ${dateEditHtml}
     <div class="gteams">
       <div class="${tac}">
-        <div class="cls">${grade}학년 ${g.a}</div>
+        <div class="cls">${grade}학년 ${gA}</div>
         ${canScore&&!hideScore?`<div class="sc">${r.sa!==''?r.sa:'-'}</div>`:''}
       </div>
       <div class="vs">VS</div>
       <div class="${tbc}">
-        <div class="cls">${g.b?grade+'학년 '+g.b:''}</div>
+        <div class="cls">${gB?grade+'학년 '+gB:''}</div>
         ${canScore&&!hideScore?`<div class="sc">${r.sb!==''?r.sb:'-'}</div>`:''}
       </div>
     </div>
@@ -685,7 +704,7 @@ function renderTot() {
         if (fin && fin.b) {
           const rFin = getR(fin.id);
           const winA = rFin.win==='A', winB = rFin.win==='B';
-          const finA = fin.a, finB = fin.b;
+          const finA = (preRanks[0]||fin.a), finB = (preRanks[1]||fin.b);
           h += `<div style="background:#f8faff;border-radius:8px;padding:10px;margin-bottom:6px">
             <p style="font-size:11px;color:#888;margin-bottom:6px">🏆 결승 승리팀 선택 (예선 1,2위)</p>
             <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -699,7 +718,7 @@ function renderTot() {
         if (hasSf && sf && sf.b) {
           const rSf = getR(sf.id);
           const winA = rSf.win==='A', winB = rSf.win==='B';
-          const sfA = sf.a, sfB = sf.b;
+          const sfA = (preRanks[2]||sf.a), sfB = (preRanks[3]||sf.b);
           h += `<div style="background:#f8faff;border-radius:8px;padding:10px;margin-bottom:6px">
             <p style="font-size:11px;color:#888;margin-bottom:6px">🥉 3,4위전 승리팀 선택 (예선 3,4위)</p>
             <div style="display:flex;gap:6px;flex-wrap:wrap">
