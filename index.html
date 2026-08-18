@@ -482,7 +482,7 @@ function calcTot(grade) {
   const cls = GRADES[grade].cls;
   const tot = {}; cls.forEach(c=>{tot[c]=0;});
   const rankPts = [4,3,2,1];
-  ['티볼'].forEach(sp => { // 현재 티볼만 실시, 배구/피구/레이저런 실시 후 추가
+  ['티볼','배구'].forEach(sp => { // 배구 추가, 피구/레이저런 실시 후 추가
     if (!DEFAULT_GAMES[sp]) return;
     const {ranks, finDone, sfDone} = calcSportFinal(sp, grade);
     ranks.forEach((cls2, i) => {
@@ -700,7 +700,7 @@ function renderTot() {
 
     // ── 종목별 최종 순위 ──
     h += `<h3 style="margin-bottom:10px">${g}학년 종목별 최종 순위</h3>`;
-    ['티볼'].forEach(sp => { // 현재 티볼만 실시
+    ['티볼','배구'].forEach(sp => { // 배구 추가
       if (!DEFAULT_GAMES[sp]) return;
       const {ranks, preRanks, finDone, sfDone, hasSf, fin, sf} = calcSportFinal(sp, g);
       const icon = sportInfo[sp];
@@ -768,7 +768,7 @@ function renderTot() {
     });
 
     // ── 배구/피구: 미실시 안내 ──
-    ['배구','피구'].forEach(sp => {
+    ['피구'].forEach(sp => {
       const icon = sportInfo[sp];
       h += `<div class="sport-final-wrap">
         <h4><span class="sport-icon">${icon}</span>${sp}</h4>
