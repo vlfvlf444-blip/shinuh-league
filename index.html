@@ -501,10 +501,21 @@ function renderStd(sport, grade) {  // sport 인수 이미 있음
     <th style="width:30px">승</th><th style="width:30px">무</th><th style="width:30px">패</th>
     ${sport!=='피구'?'<th style="width:36px">득점</th><th style="width:36px">실점</th><th style="width:36px">득실</th>':''}<th style="width:36px">승점</th>
   </tr></thead><tbody>`;
+  // 공동 순위 계산: 동점이면 같은 순위 표시
+  const rankOf = [];
   rows.forEach((r,i) => {
-    const rc=i===0?'r1':i===1?'r2':i===2?'r3':'';
-    const med=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
-    h+=`<tr><td class="${rc}">${med}${i+1}</td><td class="tnm">${grade}학년 ${r.cls}</td>
+    if (i===0) { rankOf.push(1); return; }
+    const p=rows[i-1];
+    const tied = p.pts===r.pts && p.w===r.w && (p.gf-p.ga)===(r.gf-r.ga) && p.gf===r.gf;
+    rankOf.push(tied ? rankOf[i-1] : i+1);
+  });
+  rows.forEach((r,i) => {
+    const rank = rankOf[i];
+    const isTied = rows.filter((_,j)=>rankOf[j]===rank).length > 1;
+    const rc=rank===1?'r1':rank===2?'r2':rank===3?'r3':'';
+    const med=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
+    const rankLabel = isTied ? `공동${rank}위` : `${med}${rank}`;
+    h+=`<tr><td class="${rc}" style="${isTied?'font-size:0.72em;letter-spacing:-0.5px;':''}">${rankLabel}</td><td class="tnm">${grade}학년 ${r.cls}</td>
       <td>${r.w}</td><td>${r.d}</td><td>${r.l}</td>
       ${sport!=='피구'?`<td>${r.gf}</td><td>${r.ga}</td><td style="color:${r.gf-r.ga>0?'var(--cw)':r.gf-r.ga<0?'var(--cl)':'#888'}">${r.gf-r.ga>0?'+':''}${r.gf-r.ga}</td>`:''}<td style="font-weight:700">${r.pts}</td></tr>`;
   });
