@@ -94,6 +94,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:#f4f6fb;color:#1a1a2e;min-
 .bw{background:var(--cwb);color:var(--cw)}.bl{background:var(--clb);color:var(--cl)}.bd{background:var(--cdb);color:var(--cd)}.by{background:var(--cyb);color:var(--cy)}
 .viewer-score{font-size:11px;color:#888}
 .win-pick-btn{padding:5px 12px;font-size:12px;font-weight:600;border:1.5px solid #dde3f0;border-radius:7px;background:#f8faff;color:#555;cursor:pointer;font-family:inherit}
+.team-pick-sel{padding:4px 8px;font-size:12px;border:1.5px solid #f59e0b;border-radius:6px;background:#fff8e1;color:#444;cursor:pointer;font-family:inherit}
 .win-pick-btn:hover{background:var(--cwb);border-color:var(--cw);color:var(--cw)}
 .win-pick-btn.wpick-on{background:var(--cwb);border-color:var(--cw);color:var(--cw);font-weight:700}
 
@@ -376,6 +377,18 @@ window.doLogout = async () => { await signOut(auth); };
 /* ── 데이터 헬퍼 ── */
 function getD(id) { return (fbData.dates || {})[id] || null; }
 function getR(id) { return (fbData.results || {})[id] || {sa:'', sb:'', win:''}; }
+function getFT(sport, grade, slot) { return (((fbData.finalTeams||{})[sport]||{})[`g${grade}`]||{})[slot] || ''; }
+// 공동 순위 여부: 해당 슬롯(0-based)에서 동점 팀이 있는지 확인
+function hasTied(sport, grade, slot) {
+  const rows = calcStd(sport, grade);
+  if (!rows[slot]) return false;
+  const r = rows[slot];
+  const prev = rows[slot-1];
+  const next = rows[slot+1];
+  const sameAsPrev = prev && prev.pts===r.pts && prev.w===r.w && (prev.gf-prev.ga)===(r.gf-r.ga) && prev.gf===r.gf;
+  const sameAsNext = next && next.pts===r.pts && next.w===r.w && (next.gf-next.ga)===(r.gf-r.ga) && next.gf===r.gf;
+  return sameAsPrev || sameAsNext;
+}
 async function setD(id, val, isRain) { await set(ref(db, `league2026/dates/${id}`), {val, isRain:!!isRain}); editingDate = null; }
 async function clearD(id) { await set(ref(db, `league2026/dates/${id}`), null); editingDate = null; }
 async function setR(id, sa, sb) {
@@ -438,8 +451,14 @@ function calcSportFinal(sport, grade) {
   const hasFinResult = !!getR(fin?.id||'').win;
   if (fin && preAllDone) {
     const r = getR(fin.id);
-    const finA = (preRank[0] ? preRank[0].cls : fin.a);
-    const finB = (preRank[1] ? preRank[1].cls : fin.b);
+    // 공동 순위면 수동 지정값 우선 사용
+    const tiedA = hasTied(sport, grade, 0), tiedB = hasTied(sport, grade, 1);
+    const finA = (tiedA||tiedB)
+      ? (getFT(sport, grade, 'finA') || (preRank[0]?.cls || fin.a))
+      : (preRank[0] ? preRank[0].cls : fin.a);
+    const finB = (tiedA||tiedB)
+      ? (getFT(sport, grade, 'finB') || (preRank[1]?.cls || fin.b))
+      : (preRank[1] ? preRank[1].cls : fin.b);
     if (r.win==='A')      { rank1=finA; rank2=finB; }
     else if (r.win==='B') { rank1=finB; rank2=finA; }
   }
@@ -461,8 +480,13 @@ function calcSportFinal(sport, grade) {
     const r = getR(sf.id);
     sfDone = !!r.win;
     if (preAllDone) {
-      const sfA = (preRank[2] ? preRank[2].cls : sf.a);
-      const sfB = (preRank[3] ? preRank[3].cls : sf.b);
+      const tiedC = hasTied(sport, grade, 2), tiedD = hasTied(sport, grade, 3);
+      const sfA = (tiedC||tiedD)
+        ? (getFT(sport, grade, 'sfA') || (preRank[2]?.cls || sf.a))
+        : (preRank[2] ? preRank[2].cls : sf.a);
+      const sfB = (tiedC||tiedD)
+        ? (getFT(sport, grade, 'sfB') || (preRank[3]?.cls || sf.b))
+        : (preRank[3] ? preRank[3].cls : sf.b);
       if (r.win==='A')      { rank3=sfA; rank4=sfB; }
       else if (r.win==='B') { rank3=sfB; rank4=sfA; }
     }
@@ -523,8 +547,9 @@ function renderStd(sport, grade) {  // sport 인수 이미 있음
 }
 
 function renderGame(g, grade, sport) {
-  // 결승/3,4위전: 예선 경기가 모두 끝난 경우에만 팀 이름 자동 교체
+  // 결승/3,4위전: 예선 경기가 모두 끝난 경우에만 팀 이름 자동 교체 (공동 순위면 수동 지정값 사용)
   let gA = g.a, gB = g.b;
+  let showTeamPicker = false; // 관리자용 팀 선택 드롭다운 표시 여부
   if (g.type === '결승' || g.type === '3,4위전') {
     const allGames = (DEFAULT_GAMES[sport]||{})[grade] || [];
     const preGames = allGames.filter(g2 => g2.type === '예선');
@@ -532,11 +557,30 @@ function renderGame(g, grade, sport) {
     if (preAllDone) {
       const preRank = calcStd(sport, grade);
       if (g.type === '결승') {
-        gA = preRank[0] ? preRank[0].cls : g.a;
-        gB = preRank[1] ? preRank[1].cls : g.b;
+        const slotA = 0, slotB = 1;
+        const tiedA = hasTied(sport, grade, slotA);
+        const tiedB = hasTied(sport, grade, slotB);
+        if (tiedA || tiedB) {
+          // 공동 순위: 수동 지정값 우선, 없으면 예선 순위 기본값
+          gA = getFT(sport, grade, 'finA') || (preRank[slotA]?.cls || g.a);
+          gB = getFT(sport, grade, 'finB') || (preRank[slotB]?.cls || g.b);
+          if (isAdmin) showTeamPicker = true;
+        } else {
+          gA = preRank[slotA] ? preRank[slotA].cls : g.a;
+          gB = preRank[slotB] ? preRank[slotB].cls : g.b;
+        }
       } else { // 3,4위전
-        gA = preRank[2] ? preRank[2].cls : g.a;
-        gB = preRank[3] ? preRank[3].cls : g.b;
+        const slotA = 2, slotB = 3;
+        const tiedA = hasTied(sport, grade, slotA);
+        const tiedB = hasTied(sport, grade, slotB);
+        if (tiedA || tiedB) {
+          gA = getFT(sport, grade, 'sfA') || (preRank[slotA]?.cls || g.a);
+          gB = getFT(sport, grade, 'sfB') || (preRank[slotB]?.cls || g.b);
+          if (isAdmin) showTeamPicker = true;
+        } else {
+          gA = preRank[slotA] ? preRank[slotA].cls : g.a;
+          gB = preRank[slotB] ? preRank[slotB].cls : g.b;
+        }
       }
     }
   }
@@ -575,20 +619,38 @@ function renderGame(g, grade, sport) {
     </div>`;
   }
 
+  // 공동 순위 팀 선택 드롭다운 (관리자 전용)
+  let teamPickerHtml = '';
+  if (showTeamPicker) {
+    const isFin2 = g.type === '결승';
+    const slotA = isFin2 ? 'finA' : 'sfA';
+    const slotB = isFin2 ? 'finB' : 'sfB';
+    const cls = GRADES[grade].cls;
+    const optionsA = cls.map(c=>`<option value="${c}" ${gA===c?'selected':''}>${grade}학년 ${c}</option>`).join('');
+    const optionsB = cls.map(c=>`<option value="${c}" ${gB===c?'selected':''}>${grade}학년 ${c}</option>`).join('');
+    teamPickerHtml = `<div class="inp-row" style="flex-wrap:wrap;gap:6px;background:rgba(255,200,0,0.08);border-radius:6px;padding:6px 8px;margin-bottom:4px">
+      <span style="font-size:11px;color:#f59e0b;width:100%;margin-bottom:2px">⚠️ 공동 순위 — 진출팀 직접 선택</span>
+      <label style="font-size:11px;color:#aaa">A팀:</label>
+      <select class="team-pick-sel" onchange="saveFinalTeam('${sport}',${grade},'${slotA}',this.value)">${optionsA}</select>
+      <label style="font-size:11px;color:#aaa">B팀:</label>
+      <select class="team-pick-sel" onchange="saveFinalTeam('${sport}',${grade},'${slotB}',this.value)">${optionsB}</select>
+    </div>`;
+  }
+
   let scoreHtml = '';
   if (!canScore) {
     scoreHtml = `<div class="inp-row"><span class="viewer-score">일정 추후 공지</span></div>`;
   } else if (isAdmin) {
     if (hideScore) {
       const winA = r.win==='A', winB = r.win==='B';
-      scoreHtml = `<div class="inp-row" style="flex-wrap:wrap;gap:6px">
+      scoreHtml = `${teamPickerHtml}<div class="inp-row" style="flex-wrap:wrap;gap:6px">
         <span style="font-size:11px;color:#888">승리팀 선택:</span>
         <button class="win-pick-btn${winA?' wpick-on':''}" onclick="pickWinner('${g.id}','A')">${grade}학년 ${gA} 승</button>
         <button class="win-pick-btn${winB?' wpick-on':''}" onclick="pickWinner('${g.id}','B')">${grade}학년 ${gB} 승</button>
         ${isDone?`<button class="cancel-btn" style="font-size:11px" onclick="clearWinner('${g.id}')">초기화</button>`:''}
       </div>`;
     } else {
-      scoreHtml = `<div class="inp-row">
+      scoreHtml = `${teamPickerHtml}<div class="inp-row">
         <span style="font-size:11px;color:#888">결과 입력:</span>
         <input class="sc-inp" type="number" min="0" id="sa_${g.id}" value="${r.sa}" placeholder="0">
         <span style="font-size:13px;color:#aaa">:</span>
@@ -916,6 +978,9 @@ window.pickWinner = async (id, side) => {
 };
 window.clearWinner = async (id) => {
   await set(ref(db, `league2026/results/${id}`), {sa:'', sb:'', win:''});
+};
+window.saveFinalTeam = async (sport, grade, slot, cls) => {
+  await set(ref(db, `league2026/finalTeams/${sport}/g${grade}/${slot}`), cls || null);
 };
 window.doSaveScore = async (id) => {
   const sa = document.getElementById('sa_'+id)?.value||'';
